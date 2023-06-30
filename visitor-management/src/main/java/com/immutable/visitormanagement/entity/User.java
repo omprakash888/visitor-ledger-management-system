@@ -1,13 +1,15 @@
 package com.immutable.visitormanagement.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
-public class UserDetails {
-
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
-    private String typeOfAdmin;
+
 }
