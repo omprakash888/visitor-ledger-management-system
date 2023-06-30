@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface VisitorService {
 
-    public void save(VisitorDto visitorDto);
+    public VisitorDto save(VisitorDto visitorDto);
 
     public List<VisitorDto> getAllVisitors();
 

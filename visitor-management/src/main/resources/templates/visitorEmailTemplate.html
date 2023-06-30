@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Visitor Information</title>
+    <style>
+        /* Inline CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f1f1f1;
+            padding: 10px;
+        }
+        .header h1 {
+            color: #333333;
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content p {
+            margin: 0 0 10px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table th,
+        .info-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .photo {
+            margin-top: 20px;
+        }
+        .whom-to-meet,
+        .reason-for-meeting {
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Visitor Information</h1>
+</div>
+<div class="content">
+    <p>Your Visitor Registration Id : <div>[[id]]</div></p>
+    <table class="info-table">
+        <tr>
+            <th>Name</th>
+            <td>[[name]]</td>
+        </tr>
+        <tr>
+            <th>Age</th>
+            <td>[[age]]</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>[[email]]</td>
+        </tr>
+        <tr>
+            <th>Contact Number</th>
+            <td>[[contactNumber]]</td>
+        </tr>
+        <tr>
+            <th>Photo</th>
+            <td>
+                <img src="data:image/jpeg;base64,[[photoData]]" alt="Visitor Photo" width="150px" height="150px">
+            </td>
+        </tr>
+        <tr>
+            <th>Whom to Meet</th>
+            <td>[[whomToMeet]]</td>
+        </tr>
+        <tr>
+            <th>Reason for Meeting</th>
+            <td>[[reasonForMeeting]]</td>
+        </tr>
+        <tr>
+            <th>Visitor Organization</th>
+            <td>[[visitorOrganization]]</td>
+        </tr>
+    </table>
+</div>
+<div class="footer">
+    <p>This email was generated automatically. Do not reply.</p>
+</div>
+</body>
+</html>

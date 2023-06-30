@@ -1,6 +1,7 @@
 package com.immutable.visitormanagement.controller;
 
 import com.immutable.visitormanagement.dto.VisitorDto;
+import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.service.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class VisitorController {
     private VisitorService visitorServices;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createVisitorEntry(@Valid @RequestBody VisitorDto visitorDto) {
-        visitorServices.save(visitorDto);
-        return new ResponseEntity<>("Visitor Registered Succesfuuly",HttpStatus.CREATED);
+    public ResponseEntity<VisitorDto> createVisitorEntry(@Valid @RequestBody VisitorDto visitorDto) {
+        VisitorDto visitorDto1 = visitorServices.save(visitorDto);
+        return new ResponseEntity<>(visitorDto1,HttpStatus.CREATED);
     }
 
     @GetMapping("/getAllVisitors")

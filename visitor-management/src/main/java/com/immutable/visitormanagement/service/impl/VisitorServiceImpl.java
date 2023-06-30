@@ -5,12 +5,12 @@ import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.repository.VisitorRepository;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.exception.ResourceNotFoundException;
+import com.immutable.visitormanagement.utility.VisitorUtilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
@@ -20,11 +20,17 @@ public class VisitorServiceImpl implements VisitorService {
     private VisitorRepository visitorRepository;
 
     @Autowired
+    private VisitorUtilities visitorUtilities;
+
+
+    @Autowired
     private ModelMapper modelMapper;
     @Override
-    public void save(VisitorDto visitorDto) {
+    public VisitorDto save(VisitorDto visitorDto) {
         Visitor visitor = mapToVisitor(visitorDto);
-        visitorRepository.save(visitor);
+        Visitor addVisitor = visitorRepository.save(visitor);
+        visitorUtilities.sendEmail(mapToVisitorDto(addVisitor));
+        return mapToVisitorDto(addVisitor);
     }
 
     @Override
