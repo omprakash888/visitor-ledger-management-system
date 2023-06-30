@@ -34,4 +34,8 @@ public class VisitorController {
         return new ResponseEntity<>(visitorDto,HttpStatus.OK);
     }
 
+    public String get() {
+        return null;
+    }
+
 }
