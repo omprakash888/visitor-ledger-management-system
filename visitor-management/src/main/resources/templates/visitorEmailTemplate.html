@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Visitor Information</title>
     <style>
         /* Inline CSS */
@@ -47,6 +48,10 @@
             text-align: center;
             font-size: 12px;
         }
+        .image {
+            width = 80;
+            height = 10;
+        }
     </style>
 </head>
 <body>
@@ -54,46 +59,59 @@
     <h1>Visitor Information</h1>
 </div>
 <div class="content">
-    <p>Your Visitor Registration Id : <div>[[id]]</div></p>
+    <p>Dear <span th:text="${name}"></span></p>
+    <p>We are delighted to inform you that your registration has been successfully completed, and your Visitor ID is <b><span th:text="${id}"></span></b></p>
     <table class="info-table">
         <tr>
-            <th>Name</th>
-            <td>[[name]]</td>
-        </tr>
-        <tr>
             <th>Age</th>
-            <td>[[age]]</td>
+            <td th:text="${age}"></td>
         </tr>
         <tr>
             <th>Email</th>
-            <td>[[email]]</td>
+            <td th:text="${email}"></td>
         </tr>
         <tr>
             <th>Contact Number</th>
-            <td>[[contactNumber]]</td>
+            <td th:text="${contactNumber}"></td>
         </tr>
         <tr>
             <th>Photo</th>
             <td>
-                <img src="data:image/jpeg;base64,[[photoData]]" alt="Visitor Photo" width="150px" height="150px">
+                <img th:src="'data:image/jpeg;base64,' + ${photoData}" alt="Visitor Photo" width="150px" height="150px">
             </td>
         </tr>
         <tr>
             <th>Whom to Meet</th>
-            <td>[[whomToMeet]]</td>
+            <td th:text="${whomToMeet}"></td>
         </tr>
         <tr>
             <th>Reason for Meeting</th>
-            <td>[[reasonForMeeting]]</td>
+            <td th:text="${reasonForMeeting}"></td>
         </tr>
         <tr>
             <th>Visitor Organization</th>
-            <td>[[visitorOrganization]]</td>
+            <td th:text="${visitorOrganization}"></td>
         </tr>
     </table>
+    <br>
+    <p>We kindly request you to remember to check out upon leaving the premises. Your cooperation in following this procedure ensures the safety and security of our facility.</p><br>
+    <p>Best Regards,</p>
+    <p>Kamarthi Omprakash</p><br>
+    <div>
+        <img class="image" th:src="@{'https://www.mindsprint.org/content/dam/mindsprint/Logos/mindsprint-logo.svg'}"><br>
+    </div>
+    <div style="font-size:10.0pt;font-family:Segoe UI, sans-serif;color:black">
+    <p><span>Ascendas, 12 <sup>th</sup> &nbsp; Floor, Zenith Building,</span></p>
+    <p><span> International Tech Park, CSIR Road</span></p>
+    <p><span>Taramani, Chennai, India - 600113</span></p>
+    <p><b>Ph:</b><span>&nbsp; 044-42223700</span></p>
+    <p><b>Website:</b>&nbsp; <a href="https://www.mindsprint.org/">www.mindsprint.org</a></p>
+    </div>
+
 </div>
 <div class="footer">
     <p>This email was generated automatically. Do not reply.</p>
 </div>
+
 </body>
 </html>

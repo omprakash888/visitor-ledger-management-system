@@ -4,7 +4,6 @@ import com.immutable.visitormanagement.dto.VisitorDto;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
@@ -38,7 +37,7 @@ public class VisitorUtilities {
             context.setVariable("visitorOrganization",visitorDto.getVisitorOrganization());
             String html = templateEngine.process("visitorEmailTemplate", context);
 
-            mimeMessageHelper.setSubject("Visitor registration Successful");
+            mimeMessageHelper.setSubject("Successful Registration - Important Reminder");
             mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
             mimeMessageHelper.setTo(visitorDto.getEmail());
             mimeMessageHelper.setText("Your visitor Id", true);
