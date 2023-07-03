@@ -29,7 +29,6 @@ public class Visitor {
     private String whomToMeet;
     @CreationTimestamp
     private Date inTime;
-    @UpdateTimestamp
     private Date outTime;
     private String reasonForMeeting;
     private String photoPath;

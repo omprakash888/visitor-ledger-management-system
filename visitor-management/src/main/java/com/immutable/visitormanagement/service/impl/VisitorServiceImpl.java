@@ -10,24 +10,29 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
 
+    private final VisitorRepository visitorRepository;
+
+    private final VisitorUtilities visitorUtilities;
+
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private VisitorRepository visitorRepository;
+    public VisitorServiceImpl(VisitorRepository visitorRepository, VisitorUtilities visitorUtilities, ModelMapper modelMapper) {
+        this.visitorRepository = visitorRepository;
+        this.visitorUtilities = visitorUtilities;
+        this.modelMapper = modelMapper;
+    }
 
-    @Autowired
-    private VisitorUtilities visitorUtilities;
-
-
-    @Autowired
-    private ModelMapper modelMapper;
     @Override
     public VisitorDto save(VisitorDto visitorDto) {
         Visitor visitor = mapToVisitor(visitorDto);
+        visitor.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
         Visitor addVisitor = visitorRepository.save(visitor);
         visitorUtilities.sendEmail(mapToVisitorDto(addVisitor));
         return mapToVisitorDto(addVisitor);
@@ -44,6 +49,13 @@ public class VisitorServiceImpl implements VisitorService {
     public VisitorDto getVisitorById(Long visitorId) {
         Visitor visitor = this.visitorRepository.findById(visitorId).orElseThrow(() -> new ResourceNotFoundException("Visitor","Id",visitorId));
         return mapToVisitorDto(visitor);
+    }
+
+    @Override
+    public void updateOutTime(Long visitorId) {
+        Visitor visitor = this.visitorRepository.findById(visitorId).orElseThrow(() -> new ResourceNotFoundException("visitor","id",visitorId));
+        visitor.setOutTime(new Date());
+        this.visitorRepository.save(visitor);
     }
 
 

@@ -27,7 +27,7 @@ public class UserController {
         return new ResponseEntity<>("Thank you for registering. Your registration has been successful. Please wait for your account to be activated. Once the activation process is complete, we will notify you via email.", HttpStatus.CREATED);
     }
 
-    @PostMapping("/activateAccount/{token}")
+    @GetMapping("/activateAccount/{token}")
     public ResponseEntity<String> activateAccount(@PathVariable String token) {
         String response = this.confirmationTokenService.verify(token);
         return new ResponseEntity<>(response, HttpStatus.OK);

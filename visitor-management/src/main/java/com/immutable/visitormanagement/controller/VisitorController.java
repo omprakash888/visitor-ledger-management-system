@@ -1,11 +1,11 @@
 package com.immutable.visitormanagement.controller;
 
 import com.immutable.visitormanagement.dto.VisitorDto;
-import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.service.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("api/visitor-details")
 public class VisitorController {
+
+    private final VisitorService visitorServices;
+
     @Autowired
-    private VisitorService visitorServices;
+    public VisitorController(VisitorService visitorServices) {
+        this.visitorServices = visitorServices;
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<VisitorDto> createVisitorEntry(@Valid @RequestBody VisitorDto visitorDto) {
@@ -35,8 +41,10 @@ public class VisitorController {
         return new ResponseEntity<>(visitorDto,HttpStatus.OK);
     }
 
-    public String get() {
-        return null;
+    @PostMapping("/updateOutTime/{visitorId}")
+    public ResponseEntity<String> updateOutTime(@PathVariable Long visitorId) {
+        this.visitorServices.updateOutTime(visitorId);
+        return new ResponseEntity<>("Thank you For your Time", HttpStatus.OK);
     }
 
 }

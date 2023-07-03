@@ -10,10 +10,12 @@ import java.util.List;
 @Component
 public interface VisitorService {
 
-    public VisitorDto save(VisitorDto visitorDto);
+    VisitorDto save(VisitorDto visitorDto);
 
-    public List<VisitorDto> getAllVisitors();
+    List<VisitorDto> getAllVisitors();
 
 
-    public VisitorDto getVisitorById(Long visitorId);
+    VisitorDto getVisitorById(Long visitorId);
+
+    void updateOutTime(Long visitorId);
 }
