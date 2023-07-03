@@ -47,4 +47,45 @@ public class VisitorUtilities {
             e.printStackTrace();
         }
     }
+
+
+    public void sendActivationEmail(String link) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            // Load HTML email template using Thymeleaf
+            Context context = new Context();
+            context.setVariable("link", link);
+            String html = templateEngine.process("accountActivation", context);
+
+            mimeMessageHelper.setSubject("Successful Registration - Important Reminder");
+            mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
+            mimeMessageHelper.setTo("prakash888.kamarthi@gmail.com");
+            mimeMessageHelper.setText(html, true);
+            mailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMailForAccountConfirmation(String name, String email) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            // Load HTML email template using Thymeleaf
+            Context context = new Context();
+            context.setVariable("name", name);
+            String html = templateEngine.process("AccountConfirmation", context);
+
+            mimeMessageHelper.setSubject("Your Account Activated");
+            mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setText(html, true);
+            mailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
