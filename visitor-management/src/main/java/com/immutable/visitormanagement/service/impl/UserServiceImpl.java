@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.List;
-import java.util.UUID;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -73,13 +73,10 @@ public class UserServiceImpl implements UserService {
 
 
     }
-
     private User mapToUser(UserDto userDto) {
         return this.modelMapper.map(userDto,User.class);
     }
 
-    private String generateToken() {
-        return UUID.randomUUID().toString();
-    }
+
 
 }
