@@ -31,5 +31,17 @@ public class UserController {
     public ResponseEntity<String> activateAccount(@PathVariable String token) {
         String response = this.confirmationTokenService.verify(token);
         return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/forgot-password/{email}")
+    public ResponseEntity<String> forgotPassword(@PathVariable String email) {
+        String response = this.userService.forgotPassword(email);
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
+    }
+
+    @PostMapping("/reset-password/{token}/{password}")
+    public ResponseEntity<String> resetPassword(@PathVariable("token") String token, @PathVariable("password") String password) {
+        String response = this.userService.resetPassword(token,password);
     }
 }

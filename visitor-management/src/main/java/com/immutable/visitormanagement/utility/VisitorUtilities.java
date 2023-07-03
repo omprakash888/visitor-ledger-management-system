@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -19,6 +20,8 @@ public class VisitorUtilities {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
+
+    @Async
     public void sendEmail(VisitorDto visitorDto) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -48,7 +51,7 @@ public class VisitorUtilities {
         }
     }
 
-
+    @Async
     public void sendActivationEmail(String link) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -69,6 +72,7 @@ public class VisitorUtilities {
         }
     }
 
+    @Async
     public void sendMailForAccountConfirmation(String name, String email) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -83,6 +87,22 @@ public class VisitorUtilities {
             mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
             mimeMessageHelper.setTo(email);
             mimeMessageHelper.setText(html, true);
+            mailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendResetPasswordLink(String email, String link) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setSubject("Reset-Password");
+            mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setText("Your Account reset link :- ");
+            mimeMessageHelper.setText(link);
             mailSender.send(mimeMessageHelper.getMimeMessage());
         } catch (Exception e) {
             e.printStackTrace();

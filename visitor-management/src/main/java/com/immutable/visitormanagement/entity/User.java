@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -22,5 +24,8 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean isEnabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ConfirmationToken> confirmationToken;
 
 }

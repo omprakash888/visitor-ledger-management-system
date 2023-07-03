@@ -8,4 +8,8 @@ import java.util.List;
 public interface UserService {
 
     public void signUp(UserDto userDto) throws SQLIntegrityConstraintViolationException;
+
+    public String forgotPassword(String email);
+
+    public String resetPassword(String token,String password);
 }
