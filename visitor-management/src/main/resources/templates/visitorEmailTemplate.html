@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Visitor Information</title>
     <style>
         /* Inline CSS */
@@ -10,10 +9,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            background-color: #f2f2f2;
         }
         .header {
             background-color: #f1f1f1;
             padding: 10px;
+            text-align: center;
         }
         .header h1 {
             color: #333333;
@@ -21,6 +22,9 @@
         }
         .content {
             padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .content p {
             margin: 0 0 10px;
@@ -35,12 +39,11 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        .photo {
-            margin-top: 20px;
-        }
-        .whom-to-meet,
-        .reason-for-meeting {
-            margin-top: 20px;
+        .photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
         }
         .footer {
             background-color: #f1f1f1;
@@ -48,9 +51,18 @@
             text-align: center;
             font-size: 12px;
         }
-        .image {
-            width = 80;
-            height = 10;
+        .word-image {
+            display: inline-block;
+            font-family: 'Arial Black', cursive;
+            font-weight: bold;
+            font-size: 40px;
+            font-color : white;
+            text-transform: uppercase;
+<!--            background-image: linear-gradient(to right, #ff0000, #ff0000);-->
+<!--            -webkit-background-clip: text;-->
+<!--            -webkit-text-fill-color: transparent;-->
+            letter-spacing: 2px;
+            padding: 20px;
         }
     </style>
 </head>
@@ -77,7 +89,9 @@
         <tr>
             <th>Photo</th>
             <td>
-                <img th:src="'data:image/jpeg;base64,' + ${photoData}" alt="Visitor Photo" width="150px" height="150px">
+                <div class="photo">
+                    <img th:src="'data:image/jpeg;base64,' + ${photoData}" alt="Visitor Photo">
+                </div>
             </td>
         </tr>
         <tr>
@@ -97,21 +111,17 @@
     <p>We kindly request you to remember to check out upon leaving the premises. Your cooperation in following this procedure ensures the safety and security of our facility.</p><br>
     <p>Best Regards,</p>
     <p>Kamarthi Omprakash</p><br>
-    <div>
-        <img class="image" th:src="@{'https://www.mindsprint.org/content/dam/mindsprint/Logos/mindsprint-logo.svg'}"><br>
-    </div>
+    <div class="word-image">MINDSPRINT</div>
     <div style="font-size:10.0pt;font-family:Segoe UI, sans-serif;color:black">
-    <p><span>Ascendas, 12 <sup>th</sup> &nbsp; Floor, Zenith Building,</span></p>
-    <p><span> International Tech Park, CSIR Road</span></p>
-    <p><span>Taramani, Chennai, India - 600113</span></p>
-    <p><b>Ph:</b><span>&nbsp; 044-42223700</span></p>
-    <p><b>Website:</b>&nbsp; <a href="https://www.mindsprint.org/">www.mindsprint.org</a></p>
+        <p><span>Ascendas, 12<sup>th</sup> Floor, Zenith Building,</span></p>
+        <p><span>International Tech Park, CSIR Road</span></p>
+        <p><span>Taramani, Chennai, India - 600113</span></p>
+        <p><b>Ph:</b><span>&nbsp; 044-42223700</span></p>
+        <p><b>Website:</b>&nbsp; <a href="https://www.mindsprint.org/">www.mindsprint.org</a></p>
     </div>
-
 </div>
 <div class="footer">
     <p>This email was generated automatically. Do not reply.</p>
 </div>
-
 </body>
 </html>

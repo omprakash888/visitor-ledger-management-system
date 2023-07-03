@@ -23,4 +23,5 @@ public class UserDto {
     @Length(min = 8, max = 16, message = "your name must be in between 4 and 25 characters")
     private String password;
 
+
 }
