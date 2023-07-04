@@ -2,8 +2,6 @@ package com.immutable.visitormanagement.service;
 
 import java.util.List;
 
-
-
 import com.immutable.visitormanagement.dto.EmployeeDto;
 
 import jakarta.validation.Valid;
@@ -27,4 +25,5 @@ public interface EmployeeService {
 
 
 	void deleteEmployeeById(Long employeeId);
+
 }
