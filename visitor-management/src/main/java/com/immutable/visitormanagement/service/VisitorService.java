@@ -17,5 +17,5 @@ public interface VisitorService {
 
     VisitorDto getVisitorById(Long visitorId);
 
-    void updateOutTime(Long visitorId);
+    String updateOutTime(Long visitorId);
 }

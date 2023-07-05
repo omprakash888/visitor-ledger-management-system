@@ -27,12 +27,13 @@ public class ConfirmTokenImpl implements ConfirmTokenService {
             return "your request url is invalid, please use correct url";
         }
         if(confirmationToken.getUser().isEnabled()) {
-            return "Your account has been activated";
+            return "Your request url has been expired";
         }
         User user = confirmationToken.getUser();
         user.setEnabled(true);
-
         this.userRepository.save(user);
+        confirmationToken.setExpired(true);
+        this.confirmationTokenRepository.save(confirmationToken);
         this.visitorUtilities.sendMailForAccountConfirmation(user.getName(),user.getEmail());
         return "Thanks For Your Response";
     }

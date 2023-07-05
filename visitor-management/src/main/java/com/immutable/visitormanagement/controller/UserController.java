@@ -43,6 +43,6 @@ public class UserController {
     @PostMapping("/reset-password/{token}/{password}")
     public ResponseEntity<String> resetPassword(@PathVariable("token") String token, @PathVariable("password") String password) {
         String response = this.userService.resetPassword(token,password);
-        return null;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -25,6 +25,9 @@ public class ConfirmationToken {
     @CreationTimestamp
     private Date createdDate;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean isExpired;
+
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;

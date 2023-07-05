@@ -10,6 +10,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -52,10 +54,16 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
-    public void updateOutTime(Long visitorId) {
+    public String updateOutTime(Long visitorId) {
         Visitor visitor = this.visitorRepository.findById(visitorId).orElseThrow(() -> new ResourceNotFoundException("visitor","id",visitorId));
+        LocalDateTime localDateTime = visitor.getInTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        if(LocalDateTime.now().isAfter(localDateTime.plusHours(24))) {
+            return "your visitor entry is expired, please create new visitor entry";
+        }
         visitor.setOutTime(new Date());
         this.visitorRepository.save(visitor);
+        return "Thank you for your time";
     }
 
 

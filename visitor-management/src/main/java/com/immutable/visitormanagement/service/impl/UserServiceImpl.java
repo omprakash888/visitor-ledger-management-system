@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         this.confirmationTokenRepository.save(confirmationToken);
-        visitorUtilities.sendActivationEmail("http://localhost/8080/api/auth/activateAccount/" + confirmationToken.getConfirmationToken());
+        visitorUtilities.sendActivationEmail("http://localhost:8080/api/auth/activateAccount/" + confirmationToken.getConfirmationToken());
     }
 
     @Override
@@ -51,9 +51,12 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             return "You haven't registered with these email, Please Go and register";
         }
+        if(!user.isEnabled()) {
+            return "your account is not activated, please wait for your account activation";
+        }
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         this.confirmationTokenRepository.save(confirmationToken);
-        this.visitorUtilities.sendResetPasswordLink(user.getEmail(),"http://localhost/8080/api/auth/reset-password/" + confirmationToken.getConfirmationToken());
+        this.visitorUtilities.sendResetPasswordLink(user.getEmail(),"http://localhost:8080/api/auth/reset-password/" + confirmationToken.getConfirmationToken());
         return "reset-password link sent to your email Go and Check";
     }
 
@@ -61,22 +64,23 @@ public class UserServiceImpl implements UserService {
     public String resetPassword(String token, String password) {
         ConfirmationToken confirmationToken = this.confirmationTokenRepository.findByConfirmationToken(token);
 
-        if(confirmationToken == null)  {
+        if(confirmationToken == null || confirmationToken.isExpired())  {
             return "your request url is invalid, please use correct url";
         }
-        if(confirmationToken.getUser().isEnabled()) {
-            return "Your account has been activated";
+        if(!confirmationToken.getUser().isEnabled()) {
+            return "Your account hasn't been activated";
         }
+        confirmationToken.setExpired(true);
         User user = confirmationToken.getUser();
+        user.setPassword(password);
+        this.userRepository.save(user);
+        this.confirmationTokenRepository.save(confirmationToken);
 
-        return null;
-
+        return "your password was changed successfully, please go and login";
 
     }
     private User mapToUser(UserDto userDto) {
         return this.modelMapper.map(userDto,User.class);
     }
-
-
 
 }
