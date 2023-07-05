@@ -31,6 +31,7 @@ public class Visitor {
     private Date inTime;
     private Date outTime;
     private String reasonForMeeting;
+    @Column(length  = 10000)
     private String photoPath;
     @ManyToOne
     private Employee employee;
