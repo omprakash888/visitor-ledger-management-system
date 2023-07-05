@@ -5,6 +5,7 @@ import com.immutable.visitormanagement.service.VisitorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,19 @@ import java.util.List;
 @RestController
 @RequestMapping("api/visitor-details")
 public class VisitorController {
+
+    private final VisitorService visitorServices;
+
     @Autowired
-    private VisitorService visitorServices;
+    public VisitorController(VisitorService visitorServices) {
+        this.visitorServices = visitorServices;
+    }
+
 
     @PostMapping("/create")
-    public ResponseEntity<String> createVisitorEntry(@Valid @RequestBody VisitorDto visitorDto) {
-        visitorServices.save(visitorDto);
-        return new ResponseEntity<>("Visitor Registered Succesfuuly",HttpStatus.CREATED);
+    public ResponseEntity<VisitorDto> createVisitorEntry(@Valid @RequestBody VisitorDto visitorDto) {
+        VisitorDto visitorDto1 = visitorServices.save(visitorDto);
+        return new ResponseEntity<>(visitorDto1,HttpStatus.CREATED);
     }
 
     @GetMapping("/getAllVisitors")
@@ -32,6 +39,12 @@ public class VisitorController {
     public ResponseEntity<VisitorDto> getVistorById(@RequestParam("id") Long visitorId) {
         VisitorDto visitorDto = this.visitorServices.getVisitorById(visitorId);
         return new ResponseEntity<>(visitorDto,HttpStatus.OK);
+    }
+
+    @PostMapping("/updateOutTime/{visitorId}")
+    public ResponseEntity<String> updateOutTime(@PathVariable Long visitorId) {
+        this.visitorServices.updateOutTime(visitorId);
+        return new ResponseEntity<>("Thank you For your Time", HttpStatus.OK);
     }
 
 }

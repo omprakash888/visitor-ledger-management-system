@@ -5,26 +5,37 @@ import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.repository.VisitorRepository;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.exception.ResourceNotFoundException;
+import com.immutable.visitormanagement.utility.VisitorUtilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
 
+    private final VisitorRepository visitorRepository;
+
+    private final VisitorUtilities visitorUtilities;
+
+    private final ModelMapper modelMapper;
 
     @Autowired
-    private VisitorRepository visitorRepository;
+    public VisitorServiceImpl(VisitorRepository visitorRepository, VisitorUtilities visitorUtilities, ModelMapper modelMapper) {
+        this.visitorRepository = visitorRepository;
+        this.visitorUtilities = visitorUtilities;
+        this.modelMapper = modelMapper;
+    }
 
-    @Autowired
-    private ModelMapper modelMapper;
     @Override
-    public void save(VisitorDto visitorDto) {
+    public VisitorDto save(VisitorDto visitorDto) {
         Visitor visitor = mapToVisitor(visitorDto);
-        visitorRepository.save(visitor);
+        visitor.setOutTime(new Date(System.currentTimeMillis() + (24 * 60 * 60 * 1000)));
+        Visitor addVisitor = visitorRepository.save(visitor);
+        visitorUtilities.sendEmail(mapToVisitorDto(addVisitor));
+        return mapToVisitorDto(addVisitor);
     }
 
     @Override
@@ -38,6 +49,13 @@ public class VisitorServiceImpl implements VisitorService {
     public VisitorDto getVisitorById(Long visitorId) {
         Visitor visitor = this.visitorRepository.findById(visitorId).orElseThrow(() -> new ResourceNotFoundException("Visitor","Id",visitorId));
         return mapToVisitorDto(visitor);
+    }
+
+    @Override
+    public void updateOutTime(Long visitorId) {
+        Visitor visitor = this.visitorRepository.findById(visitorId).orElseThrow(() -> new ResourceNotFoundException("visitor","id",visitorId));
+        visitor.setOutTime(new Date());
+        this.visitorRepository.save(visitor);
     }
 
 

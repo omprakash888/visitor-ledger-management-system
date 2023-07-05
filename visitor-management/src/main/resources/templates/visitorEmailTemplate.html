@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Visitor Information</title>
+    <style>
+        /* Inline CSS */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        .header {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #333333;
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .content p {
+            margin: 0 0 10px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table th,
+        .info-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .photo img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .word-image {
+            display: inline-block;
+            font-family: 'Arial Black', cursive;
+            font-weight: bold;
+            font-size: 40px;
+            font-color : white;
+            text-transform: uppercase;
+<!--            background-image: linear-gradient(to right, #ff0000, #ff0000);-->
+<!--            -webkit-background-clip: text;-->
+<!--            -webkit-text-fill-color: transparent;-->
+            letter-spacing: 2px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Visitor Information</h1>
+</div>
+<div class="content">
+    <p>Dear <span th:text="${name}"></span></p>
+    <p>We are delighted to inform you that your registration has been successfully completed, and your Visitor ID is <b><span th:text="${id}"></span></b></p>
+    <table class="info-table">
+        <tr>
+            <th>Age</th>
+            <td th:text="${age}"></td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td th:text="${email}"></td>
+        </tr>
+        <tr>
+            <th>Contact Number</th>
+            <td th:text="${contactNumber}"></td>
+        </tr>
+        <tr>
+            <th>Photo</th>
+            <td>
+                <div class="photo">
+                    <img th:src="'data:image/jpeg;base64,' + ${photoData}" alt="Visitor Photo">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>Whom to Meet</th>
+            <td th:text="${whomToMeet}"></td>
+        </tr>
+        <tr>
+            <th>Reason for Meeting</th>
+            <td th:text="${reasonForMeeting}"></td>
+        </tr>
+        <tr>
+            <th>Visitor Organization</th>
+            <td th:text="${visitorOrganization}"></td>
+        </tr>
+    </table>
+    <br>
+    <p>We kindly request you to remember to check out upon leaving the premises. Your cooperation in following this procedure ensures the safety and security of our facility.</p><br>
+    <p>Best Regards,</p>
+    <p>Kamarthi Omprakash</p><br>
+    <div class="word-image">MINDSPRINT</div>
+    <div style="font-size:10.0pt;font-family:Segoe UI, sans-serif;color:black">
+        <p><span>Ascendas, 12<sup>th</sup> Floor, Zenith Building,</span></p>
+        <p><span>International Tech Park, CSIR Road</span></p>
+        <p><span>Taramani, Chennai, India - 600113</span></p>
+        <p><b>Ph:</b><span>&nbsp; 044-42223700</span></p>
+        <p><b>Website:</b>&nbsp; <a href="https://www.mindsprint.org/">www.mindsprint.org</a></p>
+    </div>
+</div>
+<div class="footer">
+    <p>This email was generated automatically. Do not reply.</p>
+</div>
+</body>
+</html>

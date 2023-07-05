@@ -2,14 +2,14 @@ package com.immutable.visitormanagement.service;
 
 import com.immutable.visitormanagement.dto.UserDto;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface UserService {
 
-    public void createUser();
-    public UserDto getUserById(long userId);
+    public void signUp(UserDto userDto) throws SQLIntegrityConstraintViolationException;
 
-    public List<UserDto> getAllUserById();
+    public String forgotPassword(String email);
 
-    public void update();
+    public String resetPassword(String token,String password);
 }

@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class VisitorDto {
 
+    private Long id;
     @NotBlank(message = "please provide your organization name")
     @Length(min = 3, message = "your name must be greater than 2 Characters")
     private String visitorName;
