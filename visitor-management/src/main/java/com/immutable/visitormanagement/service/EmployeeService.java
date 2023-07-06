@@ -9,21 +9,9 @@ import jakarta.validation.Valid;
 public interface EmployeeService {
 
 	List<EmployeeDto> getEmployees();
-
-	
-
-	void save(@Valid EmployeeDto employeeDto);
-
-
-
+	void save(EmployeeDto employeeDto);
 	EmployeeDto getEmployeeById(Long employeeId);
-
-
-
-	void update(@Valid EmployeeDto employeeDto);
-
-
-
+	void update(EmployeeDto employeeDto);
 	void deleteEmployeeById(Long employeeId);
 
 }

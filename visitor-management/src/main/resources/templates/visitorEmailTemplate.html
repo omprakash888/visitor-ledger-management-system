@@ -87,12 +87,12 @@
             <td th:text="${contactNumber}"></td>
         </tr>
         <tr>
-            <th>Photo</th>
-            <td>
-                <div class="photo">
-                    <img th:src="'data:image/jpeg;base64,' + ${photoData}" alt="Visitor Photo">
-                </div>
-            </td>
+            <th>Date</th>
+            <td th:text="@{date}"></td>
+        </tr>
+        <tr>
+            <th>Check-InTime</th>
+            <td th:text="@{checkIn}"></td>
         </tr>
         <tr>
             <th>Whom to Meet</th>

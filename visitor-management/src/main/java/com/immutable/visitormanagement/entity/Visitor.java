@@ -6,8 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -27,9 +30,9 @@ public class Visitor {
     private String typeOfVisit;
     private String visitorOrganization;
     private String whomToMeet;
-    @CreationTimestamp
-    private Date inTime;
-    private Date outTime;
+    private LocalDate date;
+    private LocalTime inTime;
+    private LocalTime outTime;
     private String reasonForMeeting;
     private String photoPath;
     @ManyToOne

@@ -9,6 +9,7 @@ import com.immutable.visitormanagement.service.UserService;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -18,22 +19,26 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final VisitorUtilities visitorUtilities;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
-
-    @Autowired
-    private VisitorUtilities visitorUtilities;
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, ConfirmationTokenRepository confirmationTokenRepository, PasswordEncoder passwordEncoder, VisitorUtilities visitorUtilities) {
+        this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.visitorUtilities = visitorUtilities;
+    }
 
     @Override
     public void signUp(UserDto userDto) throws SQLIntegrityConstraintViolationException {
         User user = mapToUser(userDto);
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             this.userRepository.save(user);
         }
         catch (Exception e) {
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
         }
         confirmationToken.setExpired(true);
         User user = confirmationToken.getUser();
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userRepository.save(user);
         this.confirmationTokenRepository.save(confirmationToken);
 

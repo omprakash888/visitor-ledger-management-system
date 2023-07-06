@@ -2,7 +2,6 @@ package com.immutable.visitormanagement.controller;
 
 
 import com.immutable.visitormanagement.dto.UserDto;
-import com.immutable.visitormanagement.entity.ConfirmationToken;
 import com.immutable.visitormanagement.service.ConfirmTokenService;
 import com.immutable.visitormanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +12,17 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 public class UserController {
 
+    private final UserService userService;
+    private final ConfirmTokenService confirmationTokenService;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private ConfirmTokenService confirmationTokenService;
+    public UserController(UserService userService, ConfirmTokenService confirmationTokenService) {
+        this.userService = userService;
+        this.confirmationTokenService = confirmationTokenService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> registration(@RequestBody UserDto userDto) throws SQLIntegrityConstraintViolationException {
@@ -45,4 +48,5 @@ public class UserController {
         String response = this.userService.resetPassword(token,password);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }

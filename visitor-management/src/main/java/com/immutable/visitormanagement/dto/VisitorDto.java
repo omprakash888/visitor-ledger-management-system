@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 @Getter
 @Setter
@@ -35,6 +38,8 @@ public class VisitorDto {
     private String visitorOrganization;
 
     private String whomToMeet;
+    private LocalDate date;
+    private LocalTime checkIn;
 
     private String photoPath;
 

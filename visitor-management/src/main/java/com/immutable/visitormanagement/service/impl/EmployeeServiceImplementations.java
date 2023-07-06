@@ -14,17 +14,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeServiceImplementations implements EmployeeService {
-	
+
+	private final EmployeeRepository employeeRepository;
+	private  final ModelMapper modelMapper;
+
 	@Autowired
-	private EmployeeRepository employeeRepository;
-	
-	@Autowired
-	private ModelMapper modelMapper;
-	
+	public EmployeeServiceImplementations(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+		this.employeeRepository = employeeRepository;
+		this.modelMapper = modelMapper;
+	}
+
 	@Override
 	public void save(EmployeeDto employeeDto) {
 		Employee employee=mapToEmployee(employeeDto);
-		employeeRepository.save(employee);
+		this.employeeRepository.save(employee);
 	}
 	
 	@Override
@@ -42,15 +45,16 @@ public class EmployeeServiceImplementations implements EmployeeService {
 	
 	@Override
 	public void update(EmployeeDto employeeDto) {
-		 Employee employee = employeeRepository.findById(employeeDto.getEmployeeId()).get();
-	        employee.setEmployeeName(employeeDto.getEmployeeName());
-	        Employee updatedUser = employeeRepository.save(employee);
+		 this.employeeRepository.findById(employeeDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Employee", "Id", employeeDto.getId()));
+		 Employee employee = mapToEmployee(employeeDto);
+		 this.employeeRepository.save(employee);
 	}
 	
 	@Override
 	public void deleteEmployeeById(Long employeeId) {
-		employeeRepository.deleteById(employeeId);
-		
+		this.employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "Id", employeeId));
+
+		this.employeeRepository.deleteById(employeeId);
 	}
 	
 	

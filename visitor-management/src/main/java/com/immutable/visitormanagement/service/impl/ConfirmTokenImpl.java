@@ -13,12 +13,20 @@ import org.springframework.stereotype.Service;
 public class ConfirmTokenImpl implements ConfirmTokenService {
 
     @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private VisitorUtilities visitorUtilities;
+    private final VisitorUtilities visitorUtilities;
+
+    @Autowired
+    public ConfirmTokenImpl(ConfirmationTokenRepository confirmationTokenRepository, UserRepository userRepository, VisitorUtilities visitorUtilities) {
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.userRepository = userRepository;
+        this.visitorUtilities = visitorUtilities;
+    }
+
     @Override
     public String verify(String token) {
         ConfirmationToken confirmationToken = this.confirmationTokenRepository.findByConfirmationToken(token);
