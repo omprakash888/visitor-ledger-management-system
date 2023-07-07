@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class VisitorDto {
 
-    private Long id;
+    private Long visitorId;
     @NotBlank(message = "please provide your organization name")
     @Length(min = 3, message = "your name must be greater than 2 Characters")
     private String visitorName;
@@ -39,8 +39,8 @@ public class VisitorDto {
 
     private String whomToMeet;
     private LocalDate date;
-    private LocalTime checkIn;
-
+    private LocalTime inTime;
+    private LocalTime outTime;
     private String photoPath;
 
     @NotBlank(message = "please,mention the purpose of meeting")

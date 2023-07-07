@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import static com.immutable.visitormanagement.constants.Constants.MAIN_URL_LOGIN;
+
 @RestController
 public class AuthenticationController {
 
@@ -25,7 +27,7 @@ public class AuthenticationController {
     @Autowired
     private JwtHelper jwtHelper;
 
-    @PostMapping("/api/auth/login")
+    @PostMapping(MAIN_URL_LOGIN)
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
         this.doAuthenticate(request.getEmail(), request.getPassword());
 

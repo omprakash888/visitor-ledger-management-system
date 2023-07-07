@@ -3,12 +3,17 @@ package com.immutable.visitormanagement.utility;
 import com.immutable.visitormanagement.dto.VisitorDto;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+
+import java.io.File;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class VisitorUtilities {
@@ -29,7 +34,7 @@ public class VisitorUtilities {
 
             // Load HTML email template using Thymeleaf
             Context context = new Context();
-            context.setVariable("id", visitorDto.getId());
+            context.setVariable("id", visitorDto.getVisitorId());
             context.setVariable("name", visitorDto.getVisitorName());
             context.setVariable("age", visitorDto.getAge());
             context.setVariable("email", visitorDto.getEmail());
@@ -39,7 +44,7 @@ public class VisitorUtilities {
             context.setVariable("reasonForMeeting",visitorDto.getReasonForMeeting());
             context.setVariable("visitorOrganization",visitorDto.getVisitorOrganization());
             context.setVariable("date",visitorDto.getDate());
-            context.setVariable("checkIn",visitorDto.getCheckIn());
+            context.setVariable("checkIn",visitorDto.getInTime());
             String html = templateEngine.process("visitorEmailTemplate", context);
 
             mimeMessageHelper.setSubject("Successful Registration - Important Reminder");
@@ -110,4 +115,23 @@ public class VisitorUtilities {
             e.printStackTrace();
         }
     }
+
+    public void sendReportsInEmail(String filepath,String[] cc,String email) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setSubject("Visitor Summary Report");
+            mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setCc(cc);
+
+            FileSystemResource fileSystemResource = new FileSystemResource(new File(filepath));
+            mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),fileSystemResource);
+            mailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

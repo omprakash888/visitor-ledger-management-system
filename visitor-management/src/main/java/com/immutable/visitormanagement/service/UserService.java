@@ -12,4 +12,6 @@ public interface UserService {
     public String forgotPassword(String email);
 
     public String resetPassword(String token,String password);
+
+    public String sendDownloadReportAsMail(String filePath,String username);
 }

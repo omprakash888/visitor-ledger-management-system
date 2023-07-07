@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-
+import java.util.List;
 
 
 @Service
@@ -84,6 +84,14 @@ public class UserServiceImpl implements UserService {
         return "your password was changed successfully, please go and login";
 
     }
+
+    @Override
+    public String sendDownloadReportAsMail(String filePath, String username) {
+        String[] emails = this.userRepository.findAllEmails();
+        this.visitorUtilities.sendReportsInEmail(filePath,emails,username);
+        return "Email sent successfully";
+    }
+
     private User mapToUser(UserDto userDto) {
         return this.modelMapper.map(userDto,User.class);
     }

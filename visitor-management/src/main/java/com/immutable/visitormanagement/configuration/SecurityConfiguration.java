@@ -26,10 +26,11 @@ public class SecurityConfiguration {
 
 
     private static final String[] WHITE_LIST_URLS_FOR_ALL = {CREATE_URL_USER,MAIN_URL_LOGIN,CREATE_URL_VISITOR,CHECKOUT_URL_VISITOR,
-                                                             ACTIVATE_ACCOUNT_URL_USER, FORGOT_PASSWORD_URL_USER,RESET_PASSWORD_URL_USER};
-    private static final String[] WHITE_LIST_URLS_FOR_ADMIN = {GET_ALL_URL_VISITOR,GET_BY_ID_URL_VISITOR,MAIN_URL_EMPLOYEE,CREATE_URL_EMPLOYEE,
+                                                             ACTIVATE_ACCOUNT_URL_USER, FORGOT_PASSWORD_URL_USER,RESET_PASSWORD_URL_USER,
+                                                             GET_BY_ID_FOR_VISITOR_EMPLOYEE};
+    private static final String[] WHITE_LIST_URLS_FOR_ADMIN = {GET_ALL_URL_VISITOR,GET_BY_ID_URL_VISITOR,CREATE_URL_EMPLOYEE,
                                                               GET_ALL_URL_EMPLOYEE,GET_BY_ID_URL_EMPLOYEE,UPDATE_URL_EMPLOYEE,DELETE_URL_EMPLOYEE,
-                                                                DASHBOARD_URL_VISITOR};
+                                                                DASHBOARD_URL_VISITOR,SEND_EMAIL_URL_USER};
     @Autowired
     private JwtAuthFilter authFilter;
 
@@ -48,7 +49,15 @@ public class SecurityConfiguration {
 
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
-                .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS_FOR_ADMIN).authenticated().requestMatchers(WHITE_LIST_URLS_FOR_ALL).permitAll().anyRequest().authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(WHITE_LIST_URLS_FOR_ADMIN).authenticated().requestMatchers(WHITE_LIST_URLS_FOR_ALL).permitAll()
+                        .requestMatchers("/v3/api-docs",
+                                "/configuration/ui",
+                                "/swagger-resources/**",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/webjars/**")
+                        .permitAll()
+                        .anyRequest().permitAll())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

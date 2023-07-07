@@ -15,10 +15,10 @@ public class Constants {
 
 
     //ALL EMPLOYEE'S URL
-    public static final String MAIN_URL_EMPLOYEE = "/api/employee";
     public static final String CREATE_URL_EMPLOYEE = "/api/employee/create";
     public static final String GET_ALL_URL_EMPLOYEE = "/api/employee/getAllEmployees";
     public static final String GET_BY_ID_URL_EMPLOYEE = "/api/employee/getById";
+    public static final String GET_BY_ID_FOR_VISITOR_EMPLOYEE = "/api/employee/getAllEmployeesForVisitor";
     public static final String UPDATE_URL_EMPLOYEE = "/api/employee/update";
     public static final String DELETE_URL_EMPLOYEE = "/api/employee/delete";
 
@@ -27,6 +27,7 @@ public class Constants {
     public static final String ACTIVATE_ACCOUNT_URL_USER = "/api/user/activateAccount/{token}";
     public static final String FORGOT_PASSWORD_URL_USER = "/api/user/forgot-password/{email}";
     public static final String RESET_PASSWORD_URL_USER = "/api/user/reset-password/{token}/{password}";
+    public static final String SEND_EMAIL_URL_USER = "/api/user/sendReports/{filePath}";
 
 
     //ALL AUTHENTICATION CONTROLLER

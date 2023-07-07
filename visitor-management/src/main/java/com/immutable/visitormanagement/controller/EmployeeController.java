@@ -14,10 +14,9 @@ import com.immutable.visitormanagement.service.EmployeeService;
 
 import jakarta.validation.Valid;
 
-import static com.immutable.visitormanagement.constants.Constants.SECRET_KEY_VISITOR;
+import static com.immutable.visitormanagement.constants.Constants.*;
 
 @RestController
-@RequestMapping("/api/employee")
 public class EmployeeController {
 
 	private final EmployeeService employeeService;
@@ -28,20 +27,20 @@ public class EmployeeController {
 	}
 
 
-	@PostMapping("/create")
+	@PostMapping(CREATE_URL_EMPLOYEE)
     public ResponseEntity<String> createEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
 		employeeDto.setEmployeeName(employeeDto.getEmployeeName().trim());
         employeeService.save(employeeDto);
         return new ResponseEntity<>("Employee created successfully",HttpStatus.CREATED);
     }
 	
-	@GetMapping("/getAllEmployees")
+	@GetMapping(GET_ALL_URL_EMPLOYEE)
     public ResponseEntity<List<EmployeeDto>> getEmployees() {
         List<EmployeeDto> employeeDto = this.employeeService.getEmployees();
         return new ResponseEntity<>(employeeDto, HttpStatus.OK);
     }
 
-	@GetMapping("/getAllEmployeesForVisitor")
+	@GetMapping(GET_BY_ID_FOR_VISITOR_EMPLOYEE)
 	public ResponseEntity<List<EmployeeDto>> getEmployeesForVisitor(@RequestBody GetAllEmployeesForVisitor getAllEmployeesForVisitor) {
 		if(!getAllEmployeesForVisitor.getSecretKey().equals(SECRET_KEY_VISITOR)) {
 			return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
@@ -50,13 +49,13 @@ public class EmployeeController {
 		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getById")
+	@GetMapping(GET_BY_ID_URL_EMPLOYEE)
     public ResponseEntity<EmployeeDto> getEmployeeById(@RequestParam("id") Long employeeId) {
         EmployeeDto employeeDto = this.employeeService.getEmployeeById(employeeId);
         return new ResponseEntity<>(employeeDto,HttpStatus.OK);
     }
 	
-	@PutMapping("/update")
+	@PutMapping(UPDATE_URL_EMPLOYEE)
 	public ResponseEntity<String> updateEmployee(@Valid @RequestBody EmployeeDto employeeDto) {
 		employeeDto.setEmployeeName(employeeDto.getEmployeeName().trim());
 		employeeService.update(employeeDto);
@@ -64,7 +63,7 @@ public class EmployeeController {
 	}
 	
 	
-	@DeleteMapping("/delete")
+	@DeleteMapping(DELETE_URL_EMPLOYEE)
 	public ResponseEntity<String> deleteEmployeeById(@RequestParam("id") Long employeeId){
 		this.employeeService.deleteEmployeeById(employeeId);
 		return new ResponseEntity<>("employee deleted sucessfully",HttpStatus.OK);

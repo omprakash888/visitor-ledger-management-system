@@ -1,6 +1,7 @@
 package com.immutable.visitormanagement.service;
 
 
+import com.immutable.visitormanagement.dto.PersonalAndOfficialByOrganization;
 import com.immutable.visitormanagement.dto.VisitorDto;
 import com.immutable.visitormanagement.request.DashboardRequest;
 import org.springframework.stereotype.Component;
@@ -24,4 +25,11 @@ public interface VisitorService {
     Map<String, Double> getPieChartData(DashboardRequest dashboardRequest);
 
     Map<String, Long> getBarGraphData(DashboardRequest dashboardRequest);
+
+    List<PersonalAndOfficialByOrganization> getPersonalAndOfficialByOrganization(DashboardRequest dashboardRequest);
+
+    long getActiveVisitors();
+
+    Double getBusiestCheckInTime();
+
 }

@@ -1,5 +1,6 @@
 package com.immutable.visitormanagement.service.impl;
 
+import com.immutable.visitormanagement.dto.PersonalAndOfficialByOrganization;
 import com.immutable.visitormanagement.dto.VisitorDto;
 import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.repository.VisitorRepository;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VisitorServiceImpl implements VisitorService {
@@ -73,7 +75,7 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public Map<String, Double> getPieChartData(DashboardRequest dashboardRequest) {
         LocalDate localDate = LocalDate.parse(dashboardRequest.getYear() + "-" + dashboardRequest.getMonth() + "-" + dashboardRequest.getDay());
-        List<Object[]> pieChartData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate);
+        List<Object[]> pieChartData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
         int totalCount = this.visitorRepository.countByTypeOfVisitAndOrganizationNameAndLocalDateGreaterThanEqual(localDate);
         return listToMap(pieChartData,totalCount);
     }
@@ -89,6 +91,35 @@ public class VisitorServiceImpl implements VisitorService {
         return visitorCount;
     }
 
+    @Override
+    public List<PersonalAndOfficialByOrganization> getPersonalAndOfficialByOrganization(DashboardRequest dashboardRequest) {
+        LocalDate localDate = LocalDate.parse(dashboardRequest.getYear() + "-" + dashboardRequest.getMonth() + "-" + dashboardRequest.getDay());
+        List<Object[]> officialData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
+        List<Object[]> personalData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"personal");
+
+        Map<String, Long> personalMap = personalData.stream()
+                .collect(Collectors.toMap(row -> (String) row[0], row -> (Long) row[1]));
+
+        return officialData.stream()
+                .map(row -> {
+                    String organizationName = (String) row[0];
+                    Long officialCount = (Long) row[1];
+                    Long personalCount = personalMap.getOrDefault(organizationName, 0L);
+                    return new PersonalAndOfficialByOrganization(organizationName, personalCount, officialCount);
+                })
+                .toList();
+    }
+
+    @Override
+    public long getActiveVisitors() {
+        return this.visitorRepository.countActiveVisitorsByDateAndTime(LocalDate.now(),LocalTime.now());
+    }
+
+    @Override
+    public Double getBusiestCheckInTime() {
+        Double time = (this.visitorRepository.findAverageInTime()/3600);
+        return Double.valueOf(decfor.format(time));
+    }
 
     private Visitor mapToVisitor(VisitorDto visitorDto) {
         return this.modelMapper.map(visitorDto, Visitor.class);
