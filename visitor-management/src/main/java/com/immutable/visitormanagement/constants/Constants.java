@@ -3,6 +3,7 @@ package com.immutable.visitormanagement.constants;
 public class Constants {
 
     public static final String ADMIN_EMAIL = "cr7.cherrie@gmail.com";
+    public static final String ADMIN_EMAIL1 = "cr7.cherrie@gmail.com";
     public static final String SECRET_KEY_VISITOR = "visitor-ledger-mind-sprint!";
 
 
