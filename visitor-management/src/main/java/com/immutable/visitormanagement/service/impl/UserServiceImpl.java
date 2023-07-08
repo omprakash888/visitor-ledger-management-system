@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.List;
+
 
 
 @Service
@@ -56,12 +56,13 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             return "You haven't registered with these email, Please Go and register";
         }
-        if(!user.isEnabled()) {
+        if(!user.isAccountEnabled()) {
             return "your account is not activated, please wait for your account activation";
         }
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         this.confirmationTokenRepository.save(confirmationToken);
-        this.visitorUtilities.sendResetPasswordLink(user.getEmail(),"http://localhost:8080/api/auth/reset-password/" + confirmationToken.getConfirmationToken());
+        System.out.println(confirmationToken.getConfirmationToken());
+        this.visitorUtilities.sendResetPasswordLink(user.getEmail(),"http://localhost:4200/reset-password/" + confirmationToken.getConfirmationToken());
         return "reset-password link sent to your email Go and Check";
     }
 
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService {
         if(confirmationToken == null || confirmationToken.isExpired())  {
             return "your request url is invalid, please use correct url";
         }
-        if(!confirmationToken.getUser().isEnabled()) {
+        if(!confirmationToken.getUser().isAccountEnabled()) {
             return "Your account hasn't been activated";
         }
         confirmationToken.setExpired(true);
@@ -90,6 +91,12 @@ public class UserServiceImpl implements UserService {
         String[] emails = this.userRepository.findAllEmails();
         this.visitorUtilities.sendReportsInEmail(filePath,emails,username);
         return "Email sent successfully";
+    }
+
+    @Override
+    public boolean checkAccountActivatedOrNot(String email) {
+        User user = this.userRepository.findByEmailIgnoreCase(email);
+        return user != null && user.isAccountEnabled();
     }
 
     private User mapToUser(UserDto userDto) {

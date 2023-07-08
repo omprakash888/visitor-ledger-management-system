@@ -3,6 +3,7 @@ package com.immutable.visitormanagement.controller;
 import com.immutable.visitormanagement.configuration.JwtHelper;
 import com.immutable.visitormanagement.dto.JwtRequest;
 import com.immutable.visitormanagement.dto.JwtResponse;
+import com.immutable.visitormanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,9 @@ public class AuthenticationController {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -29,8 +33,11 @@ public class AuthenticationController {
 
     @PostMapping(MAIN_URL_LOGIN)
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-        this.doAuthenticate(request.getEmail(), request.getPassword());
+        if(!userService.checkAccountActivatedOrNot(request.getEmail())) {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
 
+        this.doAuthenticate(request.getEmail(), request.getPassword());
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = this.jwtHelper.generateToken(userDetails);
 

@@ -25,8 +25,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean isEnabled;
+    private boolean isAccountEnabled;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ConfirmationToken> confirmationToken;

@@ -10,32 +10,21 @@ import com.immutable.visitormanagement.service.EmailService;
 
 @RestController
 public class EmailController {
-
-
-
 	@Autowired 
 	private EmailService emailService;
 
-	// Sending a simple Email
 	@PostMapping("/sendMail")
-	
-	public String
-	sendMail(@RequestBody EmailDetails details)
+	public String sendMail(@RequestBody EmailDetails details)
 	{
-		String status
-			= emailService.sendSimpleMail(details);
-
+		String status = emailService.sendSimpleMail(details);
 		return status;
 	}
 
 	// Sending email with attachment
 	@PostMapping("/sendMailWithAttachment")
-	public String sendMailWithAttachment(
-		@RequestBody EmailDetails details)
+	public String sendMailWithAttachment(@RequestBody EmailDetails details)
 	{
-		String status
-			= emailService.sendMailWithAttachment(details);
-
+		String status = emailService.sendMailWithAttachment(details);
 		return status;
 	}
 }

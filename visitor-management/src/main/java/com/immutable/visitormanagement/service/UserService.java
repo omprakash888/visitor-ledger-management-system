@@ -14,4 +14,6 @@ public interface UserService {
     public String resetPassword(String token,String password);
 
     public String sendDownloadReportAsMail(String filePath,String username);
+
+    boolean checkAccountActivatedOrNot(String email);
 }

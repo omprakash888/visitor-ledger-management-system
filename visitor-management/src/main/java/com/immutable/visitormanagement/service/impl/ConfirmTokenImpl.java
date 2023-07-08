@@ -34,11 +34,11 @@ public class ConfirmTokenImpl implements ConfirmTokenService {
         if(confirmationToken == null)  {
             return "your request url is invalid, please use correct url";
         }
-        if(confirmationToken.getUser().isEnabled()) {
+        if(confirmationToken.getUser().isAccountEnabled()) {
             return "Your request url has been expired";
         }
         User user = confirmationToken.getUser();
-        user.setEnabled(true);
+        user.setAccountEnabled(true);
         this.userRepository.save(user);
         confirmationToken.setExpired(true);
         this.confirmationTokenRepository.save(confirmationToken);
