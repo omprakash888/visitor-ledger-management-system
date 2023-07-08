@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
+import java.util.Base64;
+
 @Component
 public class VisitorUtilities {
     private final JavaMailSender mailSender;
@@ -39,12 +41,12 @@ public class VisitorUtilities {
             context.setVariable("age", visitorDto.getAge());
             context.setVariable("email", visitorDto.getEmail());
             context.setVariable("contactNumber", visitorDto.getContactNumber());
-            context.setVariable("photoData",visitorDto.getPhotoPath());
             context.setVariable("whomToMeet",visitorDto.getWhomToMeet());
             context.setVariable("reasonForMeeting",visitorDto.getReasonForMeeting());
             context.setVariable("visitorOrganization",visitorDto.getVisitorOrganization());
             context.setVariable("date",visitorDto.getDate());
             context.setVariable("checkIn",visitorDto.getInTime());
+            context.setVariable("checokOut",visitorDto.getOutTime());
             String html = templateEngine.process("visitorEmailTemplate", context);
 
             mimeMessageHelper.setSubject("Successful Registration - Important Reminder");
