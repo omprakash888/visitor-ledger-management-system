@@ -30,7 +30,7 @@ public class SecurityConfiguration {
                                                              GET_BY_ID_FOR_VISITOR_EMPLOYEE};
     private static final String[] WHITE_LIST_URLS_FOR_ADMIN = {GET_ALL_URL_VISITOR,GET_BY_ID_URL_VISITOR,CREATE_URL_EMPLOYEE,
                                                               GET_ALL_URL_EMPLOYEE,GET_BY_ID_URL_EMPLOYEE,UPDATE_URL_EMPLOYEE,DELETE_URL_EMPLOYEE,
-                                                                DASHBOARD_URL_VISITOR,SEND_EMAIL_URL_USER};
+                                                                DASHBOARD_URL_VISITOR,SEND_EMAIL_URL_USER,GET_VISITOR_ORGANIZATION};
     @Autowired
     private JwtAuthFilter authFilter;
 
@@ -57,7 +57,7 @@ public class SecurityConfiguration {
                                 "/swagger-ui/**",
                                 "/webjars/**")
                         .permitAll()
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

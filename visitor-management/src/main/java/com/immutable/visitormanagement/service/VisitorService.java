@@ -32,4 +32,5 @@ public interface VisitorService {
 
     Double getBusiestCheckInTime();
 
+    List<String> getAllVisitorOrganization();
 }

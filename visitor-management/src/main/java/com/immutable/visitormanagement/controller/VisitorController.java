@@ -77,5 +77,11 @@ public class VisitorController {
     }
 
 
+    @GetMapping(GET_VISITOR_ORGANIZATION)
+    public ResponseEntity<List<String>> getVisitorOrganization() {
+        List<String> organization = this.visitorServices.getAllVisitorOrganization();
+        return new ResponseEntity<>(organization,HttpStatus.OK);
+    }
+
 
 }

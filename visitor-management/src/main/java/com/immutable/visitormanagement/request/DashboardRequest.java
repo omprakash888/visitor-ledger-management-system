@@ -10,9 +10,5 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DashboardRequest {
-
-    private String day;
-    private String month;
-    private String year;
-    private String organizationName;
+    private String date;
 }

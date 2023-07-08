@@ -2,8 +2,9 @@ package com.immutable.visitormanagement.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.immutable.visitormanagement.request.GetAllEmployeesForVisitor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +42,15 @@ public class EmployeeController {
     }
 
 	@GetMapping(GET_BY_ID_FOR_VISITOR_EMPLOYEE)
-	public ResponseEntity<List<EmployeeDto>> getEmployeesForVisitor(@RequestBody GetAllEmployeesForVisitor getAllEmployeesForVisitor) {
-		if(!getAllEmployeesForVisitor.getSecretKey().equals(SECRET_KEY_VISITOR)) {
+	public ResponseEntity<List<String>> getEmployeesForVisitor(@PathVariable String secretKey) {
+		if(!secretKey.equals(SECRET_KEY_VISITOR)) {
 			return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
 		}
 		List<EmployeeDto> employeeDto = this.employeeService.getEmployees();
-		return new ResponseEntity<>(employeeDto, HttpStatus.OK);
+		List<String> employeeNames = employeeDto.stream()
+				.map(EmployeeDto::getEmployeeName)
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(employeeNames, HttpStatus.OK);
 	}
 	
 	@GetMapping(GET_BY_ID_URL_EMPLOYEE)

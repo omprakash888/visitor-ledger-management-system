@@ -45,8 +45,8 @@ public class VisitorUtilities {
             context.setVariable("reasonForMeeting",visitorDto.getReasonForMeeting());
             context.setVariable("visitorOrganization",visitorDto.getVisitorOrganization());
             context.setVariable("date",visitorDto.getDate());
-            context.setVariable("checkIn",visitorDto.getInTime());
-            context.setVariable("checokOut",visitorDto.getOutTime());
+            context.setVariable("inTime",visitorDto.getInTime());
+            context.setVariable("outTime",visitorDto.getOutTime());
             String html = templateEngine.process("visitorEmailTemplate", context);
 
             mimeMessageHelper.setSubject("Successful Registration - Important Reminder");

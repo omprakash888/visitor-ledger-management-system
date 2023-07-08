@@ -3,7 +3,6 @@ package com.immutable.visitormanagement.constants;
 public class Constants {
 
     public static final String ADMIN_EMAIL = "cr7.cherrie@gmail.com";
-    public static final String ADMIN_EMAIL1 = "cr7.cherrie@gmail.com";
     public static final String SECRET_KEY_VISITOR = "visitor-ledger-mind-sprint!";
 
 
@@ -13,13 +12,14 @@ public class Constants {
     public static final String GET_BY_ID_URL_VISITOR = "/api/visitor-details/getVisitorById";
     public static final String CHECKOUT_URL_VISITOR = "/api/visitor-details/updateOutTime";
     public static final String DASHBOARD_URL_VISITOR = "/api/visitor-details/dashboardData";
+    public static final String GET_VISITOR_ORGANIZATION = "/api/visitor-details/getVisitorOrganization";
 
 
     //ALL EMPLOYEE'S URL
     public static final String CREATE_URL_EMPLOYEE = "/api/employee/create";
     public static final String GET_ALL_URL_EMPLOYEE = "/api/employee/getAllEmployees";
     public static final String GET_BY_ID_URL_EMPLOYEE = "/api/employee/getById";
-    public static final String GET_BY_ID_FOR_VISITOR_EMPLOYEE = "/api/employee/getAllEmployeesForVisitor";
+    public static final String GET_BY_ID_FOR_VISITOR_EMPLOYEE = "/api/employee/getAllEmployeesForVisitor/{secretKey}";
     public static final String UPDATE_URL_EMPLOYEE = "/api/employee/update";
     public static final String DELETE_URL_EMPLOYEE = "/api/employee/delete";
 

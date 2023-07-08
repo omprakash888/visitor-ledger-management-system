@@ -31,4 +31,6 @@ public interface VisitorRepository extends JpaRepository<Visitor,Long> {
     @Query("SELECT AVG(CAST(FUNCTION('TIME_TO_SEC', v.inTime) AS DOUBLE)) FROM Visitor v")
     Double findAverageInTime();
 
+    @Query("SELECT DISTINCT v.visitorOrganization FROM Visitor v")
+    List<String> findAllOrganization();
 }

@@ -2,7 +2,9 @@ package com.immutable.visitormanagement.service.impl;
 
 import com.immutable.visitormanagement.dto.PersonalAndOfficialByOrganization;
 import com.immutable.visitormanagement.dto.VisitorDto;
+import com.immutable.visitormanagement.entity.Employee;
 import com.immutable.visitormanagement.entity.Visitor;
+import com.immutable.visitormanagement.repository.EmployeeRepository;
 import com.immutable.visitormanagement.repository.VisitorRepository;
 import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.service.VisitorService;
@@ -27,13 +29,15 @@ public class VisitorServiceImpl implements VisitorService {
     private final VisitorRepository visitorRepository;
     private final VisitorUtilities visitorUtilities;
     private final ModelMapper modelMapper;
+    private final EmployeeRepository employeeRepository;
     private static final DecimalFormat decfor = new DecimalFormat("0.00");
 
     @Autowired
-    public VisitorServiceImpl(VisitorRepository visitorRepository, VisitorUtilities visitorUtilities, ModelMapper modelMapper) {
+    public VisitorServiceImpl(VisitorRepository visitorRepository, VisitorUtilities visitorUtilities, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
         this.visitorRepository = visitorRepository;
         this.visitorUtilities = visitorUtilities;
         this.modelMapper = modelMapper;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -43,6 +47,13 @@ public class VisitorServiceImpl implements VisitorService {
         visitor.setInTime(LocalTime.now());
         visitor.setOutTime(LocalTime.now().plusHours(24));
         Visitor addVisitor = visitorRepository.save(visitor);
+        Employee employee = this.employeeRepository.findByEmployeeName(visitorDto.getWhomToMeet());
+        if(employee != null) {
+            List<Visitor> oldVisitor = employee.getVisitor();
+            oldVisitor.add(visitor);
+            employee.setVisitor(oldVisitor);
+            this.employeeRepository.save(employee);
+        }
         visitorUtilities.sendEmail(mapToVisitorDto(addVisitor));
         return mapToVisitorDto(addVisitor);
     }
@@ -74,7 +85,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public Map<String, Double> getPieChartData(DashboardRequest dashboardRequest) {
-        LocalDate localDate = LocalDate.parse(dashboardRequest.getYear() + "-" + dashboardRequest.getMonth() + "-" + dashboardRequest.getDay());
+        LocalDate localDate = LocalDate.parse(dashboardRequest.getDate());
         List<Object[]> pieChartData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
         int totalCount = this.visitorRepository.countByTypeOfVisitAndOrganizationNameAndLocalDateGreaterThanEqual(localDate);
         return listToMap(pieChartData,totalCount);
@@ -82,8 +93,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public Map<String, Long> getBarGraphData(DashboardRequest dashboardRequest) {
-        LocalDate localDate = LocalDate.parse(dashboardRequest.getYear() + "-" + dashboardRequest.getMonth() + "-" + dashboardRequest.getDay());
-        Long officialVisitCount = this.visitorRepository.countTypeOfVisitorVisitorsFromDate(localDate,"official");
+        LocalDate localDate = LocalDate.parse(dashboardRequest.getDate());        Long officialVisitCount = this.visitorRepository.countTypeOfVisitorVisitorsFromDate(localDate,"official");
         Long personalVisitCount = this.visitorRepository.countTypeOfVisitorVisitorsFromDate(localDate,"personal");
         Map<String,Long> visitorCount = new HashMap<>();
         visitorCount.put("personal",personalVisitCount);
@@ -93,8 +103,7 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public List<PersonalAndOfficialByOrganization> getPersonalAndOfficialByOrganization(DashboardRequest dashboardRequest) {
-        LocalDate localDate = LocalDate.parse(dashboardRequest.getYear() + "-" + dashboardRequest.getMonth() + "-" + dashboardRequest.getDay());
-        List<Object[]> officialData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
+        LocalDate localDate = LocalDate.parse(dashboardRequest.getDate());        List<Object[]> officialData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
         List<Object[]> personalData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"personal");
 
         Map<String, Long> personalMap = personalData.stream()
@@ -119,6 +128,11 @@ public class VisitorServiceImpl implements VisitorService {
     public Double getBusiestCheckInTime() {
         Double time = (this.visitorRepository.findAverageInTime()/3600);
         return Double.valueOf(decfor.format(time));
+    }
+
+    @Override
+    public List<String> getAllVisitorOrganization() {
+        return this.visitorRepository.findAllOrganization();
     }
 
     private Visitor mapToVisitor(VisitorDto visitorDto) {
