@@ -14,6 +14,8 @@ public class Constants {
     public static final String DASHBOARD_URL_VISITOR = "/api/visitor-details/dashboardData";
     public static final String GET_VISITOR_ORGANIZATION = "/api/visitor-details/getVisitorOrganization";
 
+    public static final String DOWNLOAD_REPORTS = "/api/visitor-details/downloadReports";
+
 
     //ALL EMPLOYEE'S URL
     public static final String CREATE_URL_EMPLOYEE = "/api/employee/create";

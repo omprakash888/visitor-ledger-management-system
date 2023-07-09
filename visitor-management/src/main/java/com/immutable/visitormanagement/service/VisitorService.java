@@ -5,6 +5,7 @@ import com.immutable.visitormanagement.dto.PersonalAndOfficialByOrganization;
 import com.immutable.visitormanagement.dto.VisitorDto;
 import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.request.DownloadRequest;
+import com.immutable.visitormanagement.response.DownloadResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,5 +36,5 @@ public interface VisitorService {
 
     List<String> getAllVisitorOrganization();
 
-    List<VisitorDto> downloadData(DownloadRequest downloadRequest);
+    List<DownloadResponse> downloadData(DownloadRequest downloadRequest);
 }

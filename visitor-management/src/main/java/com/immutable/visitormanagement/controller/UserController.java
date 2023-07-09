@@ -59,6 +59,7 @@ public class UserController {
         Authentication authentication = context.getAuthentication();
         String username = authentication.getName();
         System.out.println("user name " + username);
+        System.out.println(filePath);
         String response = this.userService.sendDownloadReportAsMail(filePath,username);
 
         return new ResponseEntity<>(response,HttpStatus.OK);

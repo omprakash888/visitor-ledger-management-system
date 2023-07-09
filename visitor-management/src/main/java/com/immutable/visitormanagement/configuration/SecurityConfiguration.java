@@ -27,10 +27,10 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URLS_FOR_ALL = {CREATE_URL_USER,MAIN_URL_LOGIN,CREATE_URL_VISITOR,CHECKOUT_URL_VISITOR,
                                                              ACTIVATE_ACCOUNT_URL_USER, FORGOT_PASSWORD_URL_USER,RESET_PASSWORD_URL_USER,
-                                                             GET_BY_ID_FOR_VISITOR_EMPLOYEE,"/downloadReports"};
+                                                             GET_BY_ID_FOR_VISITOR_EMPLOYEE,};
     private static final String[] WHITE_LIST_URLS_FOR_ADMIN = {GET_ALL_URL_VISITOR,GET_BY_ID_URL_VISITOR,CREATE_URL_EMPLOYEE,
                                                               GET_ALL_URL_EMPLOYEE,GET_BY_ID_URL_EMPLOYEE,UPDATE_URL_EMPLOYEE,DELETE_URL_EMPLOYEE,
-                                                                DASHBOARD_URL_VISITOR,SEND_EMAIL_URL_USER,GET_VISITOR_ORGANIZATION};
+                                                                DASHBOARD_URL_VISITOR,SEND_EMAIL_URL_USER,GET_VISITOR_ORGANIZATION,DOWNLOAD_REPORTS};
     @Autowired
     private JwtAuthFilter authFilter;
 

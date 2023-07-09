@@ -5,6 +5,7 @@ import com.immutable.visitormanagement.dto.VisitorDto;
 import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.request.DownloadRequest;
 import com.immutable.visitormanagement.response.DashBoardResponse;
+import com.immutable.visitormanagement.response.DownloadResponse;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
 import jakarta.validation.Valid;
@@ -89,10 +90,10 @@ public class VisitorController {
         return new ResponseEntity<>(organization,HttpStatus.OK);
     }
 
-    @GetMapping("/downloadReports")
-    public ResponseEntity<ByteArrayResource> downloadData(@RequestBody DownloadRequest downloadRequest) throws IOException {
-        List<VisitorDto> visitorList = this.visitorServices.downloadData(downloadRequest);
-        return this.visitorUtilities.downloadExcel(visitorList);
+    @PostMapping(DOWNLOAD_REPORTS)
+    public ResponseEntity<List<DownloadResponse>> downloadData(@RequestBody DownloadRequest downloadRequest) throws IOException {
+        List<DownloadResponse> visitorList = this.visitorServices.downloadData(downloadRequest);
+        return new ResponseEntity<>(visitorList,HttpStatus.OK);
     }
 
 }

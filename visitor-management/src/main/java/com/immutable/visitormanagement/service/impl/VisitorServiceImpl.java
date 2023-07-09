@@ -8,6 +8,7 @@ import com.immutable.visitormanagement.repository.EmployeeRepository;
 import com.immutable.visitormanagement.repository.VisitorRepository;
 import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.request.DownloadRequest;
+import com.immutable.visitormanagement.response.DownloadResponse;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.exception.ResourceNotFoundException;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
@@ -135,7 +136,7 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
-    public List<VisitorDto> downloadData(DownloadRequest downloadRequest) {
+    public List<DownloadResponse> downloadData(DownloadRequest downloadRequest) {
         LocalDate startDate = LocalDate.parse(downloadRequest.getStartDate());
         LocalDate endDate = LocalDate.parse(downloadRequest.getEndDate());
         List<Visitor> list = new ArrayList<>();
@@ -151,7 +152,7 @@ public class VisitorServiceImpl implements VisitorService {
         else {
             list = this.visitorRepository.findDownloadDataByOrganization(downloadRequest.getOrganizationName(),downloadRequest.getTypeOfVisit(),startDate,endDate);
         }
-        return list.stream().map(this::mapToVisitorDto).toList();
+        return list.stream().map(this::mapToDownloadResponse).toList();
     }
 
     private Visitor mapToVisitor(VisitorDto visitorDto) {
@@ -160,6 +161,10 @@ public class VisitorServiceImpl implements VisitorService {
 
     private VisitorDto mapToVisitorDto(Visitor visitor) {
         return this.modelMapper.map(visitor,VisitorDto.class);
+    }
+
+    private DownloadResponse mapToDownloadResponse(Visitor visitor) {
+        return this.modelMapper.map(visitor,DownloadResponse.class);
     }
 
     private Map<String, Double> listToMap(List<Object[]> list, int totalCount) {
