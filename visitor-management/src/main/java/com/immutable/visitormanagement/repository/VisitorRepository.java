@@ -33,4 +33,19 @@ public interface VisitorRepository extends JpaRepository<Visitor,Long> {
 
     @Query("SELECT DISTINCT v.visitorOrganization FROM Visitor v")
     List<String> findAllOrganization();
+
+    @Query("SELECT v from Visitor v WHERE ((v.typeOfVisit = :typeOfVisit) AND (v.date >= :start) AND (v.date <= :end))")
+    List<Visitor> findDownloadData(@Param("typeOfVisit") String typeOfVisit,@Param("start") LocalDate startDate,@Param("end") LocalDate endDate);
+
+
+    @Query("SELECT v from Visitor v WHERE ((v.date >= :start) AND (v.date <= :end))")
+    List<Visitor> findDownloadDataByPersonalAndOrganization(@Param("start") LocalDate startDate,@Param("end") LocalDate endDate);
+
+
+    @Query("SELECT v from Visitor v WHERE ((v.visitorOrganization = :organizationName) AND (v.typeOfVisit = :typeOfVisit) AND (v.date >= :start) AND (v.date <= :end))")
+    List<Visitor> findDownloadDataByOrganization(@Param("organizationName") String organizationName,@Param("typeOfVisit") String typeOfVisit,@Param("start") LocalDate startDate,@Param("end") LocalDate endDate);
+
+    @Query("SELECT v from Visitor v WHERE ((v.visitorOrganization = :organizationName)  AND (v.date >= :start) AND (v.date <= :end))")
+    List<Visitor> findDownloadDataByOrganizationByPersonalAndOfficial(@Param("organizationName") String organizationName,@Param("start") LocalDate startDate,@Param("end") LocalDate endDate);
+
 }

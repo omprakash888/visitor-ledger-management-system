@@ -7,6 +7,7 @@ import com.immutable.visitormanagement.entity.Visitor;
 import com.immutable.visitormanagement.repository.EmployeeRepository;
 import com.immutable.visitormanagement.repository.VisitorRepository;
 import com.immutable.visitormanagement.request.DashboardRequest;
+import com.immutable.visitormanagement.request.DownloadRequest;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.exception.ResourceNotFoundException;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
@@ -18,9 +19,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -133,6 +132,26 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     public List<String> getAllVisitorOrganization() {
         return this.visitorRepository.findAllOrganization();
+    }
+
+    @Override
+    public List<VisitorDto> downloadData(DownloadRequest downloadRequest) {
+        LocalDate startDate = LocalDate.parse(downloadRequest.getStartDate());
+        LocalDate endDate = LocalDate.parse(downloadRequest.getEndDate());
+        List<Visitor> list = new ArrayList<>();
+        if(Objects.equals(downloadRequest.getOrganizationName(), "all") && Objects.equals(downloadRequest.getTypeOfVisit(), "both")) {
+            list = this.visitorRepository.findDownloadDataByPersonalAndOrganization(startDate,endDate);
+        }
+        else if(Objects.equals(downloadRequest.getOrganizationName(), "all")) {
+            list = this.visitorRepository.findDownloadData(downloadRequest.getTypeOfVisit(),startDate,endDate);
+        }
+        else if(Objects.equals(downloadRequest.getTypeOfVisit(), "both")) {
+            list = this.visitorRepository.findDownloadDataByOrganizationByPersonalAndOfficial(downloadRequest.getOrganizationName(),startDate,endDate);
+        }
+        else {
+            list = this.visitorRepository.findDownloadDataByOrganization(downloadRequest.getOrganizationName(),downloadRequest.getTypeOfVisit(),startDate,endDate);
+        }
+        return list.stream().map(this::mapToVisitorDto).toList();
     }
 
     private Visitor mapToVisitor(VisitorDto visitorDto) {

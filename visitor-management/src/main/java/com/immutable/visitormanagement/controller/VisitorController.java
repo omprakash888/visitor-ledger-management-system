@@ -3,14 +3,18 @@ package com.immutable.visitormanagement.controller;
 import com.immutable.visitormanagement.dto.PersonalAndOfficialByOrganization;
 import com.immutable.visitormanagement.dto.VisitorDto;
 import com.immutable.visitormanagement.request.DashboardRequest;
+import com.immutable.visitormanagement.request.DownloadRequest;
 import com.immutable.visitormanagement.response.DashBoardResponse;
 import com.immutable.visitormanagement.service.VisitorService;
+import com.immutable.visitormanagement.utility.VisitorUtilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +24,13 @@ import static com.immutable.visitormanagement.constants.Constants.*;
 public class VisitorController {
 
     private final VisitorService visitorServices;
+    private final VisitorUtilities visitorUtilities;
 
 
     @Autowired
-    public VisitorController(VisitorService visitorServices) {
+    public VisitorController(VisitorService visitorServices, VisitorUtilities visitorUtilities) {
         this.visitorServices = visitorServices;
+        this.visitorUtilities = visitorUtilities;
     }
 
 
@@ -83,5 +89,10 @@ public class VisitorController {
         return new ResponseEntity<>(organization,HttpStatus.OK);
     }
 
+    @GetMapping("/downloadReports")
+    public ResponseEntity<ByteArrayResource> downloadData(@RequestBody DownloadRequest downloadRequest) throws IOException {
+        List<VisitorDto> visitorList = this.visitorServices.downloadData(downloadRequest);
+        return this.visitorUtilities.downloadExcel(visitorList);
+    }
 
 }

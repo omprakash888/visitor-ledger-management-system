@@ -2,8 +2,18 @@ package com.immutable.visitormanagement.utility;
 
 import com.immutable.visitormanagement.dto.VisitorDto;
 import jakarta.mail.internet.MimeMessage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -11,7 +21,9 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -135,5 +147,66 @@ public class VisitorUtilities {
             e.printStackTrace();
         }
     }
+
+    public ResponseEntity<ByteArrayResource> downloadExcel(List<VisitorDto> visitors) throws IOException {
+         // Replace with your own list of Visitor objects
+
+        // Create Excel workbook and sheet
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Visitors");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"Visitor-Id","Visitor Name","Age","gender","contact Number","email","date","check-In-Time","check-out-Time","Type of Visit","Organization Name","Whom To Meet","Reason For Meeting"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+        }
+
+        // Create data rows
+        int rowNum = 1;
+        for (VisitorDto visitor : visitors) {
+            Row row = sheet.createRow(rowNum++);
+            // Set cell values for each column
+            row.createCell(0).setCellValue(visitor.getVisitorId());
+            row.createCell(1).setCellValue(visitor.getVisitorName());
+            row.createCell(2).setCellValue(visitor.getAge());
+            row.createCell(3).setCellValue(visitor.getGender());
+            row.createCell(4).setCellValue(visitor.getContactNumber());
+            row.createCell(5).setCellValue(visitor.getEmail());
+            row.createCell(6).setCellValue(visitor.getDate());
+            row.createCell(7).setCellValue(visitor.getInTime().toString());
+            row.createCell(8).setCellValue(visitor.getOutTime().toString());
+            row.createCell(9).setCellValue(visitor.getTypeOfVisit());
+            row.createCell(10).setCellValue(visitor.getVisitorOrganization());
+            row.createCell(11).setCellValue(visitor.getWhomToMeet());
+            row.createCell(12).setCellValue(visitor.getReasonForMeeting());
+        }
+
+        // Write workbook to output stream
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+
+        // Prepare response with Excel content
+        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
+        byte[] excelBytes = outputStream.toByteArray();
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        header.setContentDisposition(ContentDisposition.attachment().filename("visitors.xlsx").build());
+
+//        HttpHeaders header = new HttpHeaders();
+//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=visitors.xlsx");
+//
+//        return ResponseEntity
+//                .ok()
+//                .headers(header)
+//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .body(resource);
+
+        return ResponseEntity.ok().headers(header).body(new ByteArrayResource(excelBytes));
+
+    }
+
+
 
 }
