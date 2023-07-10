@@ -47,8 +47,8 @@ public class VisitorController {
     }
 
     @GetMapping(GET_ALL_URL_VISITOR)
-    public ResponseEntity<List<VisitorDto>> getAllVisitors() {
-        List<VisitorDto> visitorDtos = this.visitorServices.getAllVisitors();
+    public ResponseEntity<List<DownloadResponse>> getAllVisitors() {
+        List<DownloadResponse> visitorDtos = this.visitorServices.getAllVisitors();
         return new ResponseEntity<>(visitorDtos, HttpStatus.OK);
     }
 
@@ -70,7 +70,7 @@ public class VisitorController {
         Map<String,Double> pieChartData = this.visitorServices.getPieChartData(dashboardRequest);
         Map<String,Long> barGraphData = this.visitorServices.getBarGraphData(dashboardRequest);
         List<PersonalAndOfficialByOrganization> personalAndOfficialByOrganizationData = this.visitorServices.getPersonalAndOfficialByOrganization(dashboardRequest);
-        List<VisitorDto> visitorDto = this.visitorServices.getAllVisitors();
+        List<DownloadResponse> visitorDto = this.visitorServices.getAllVisitors();
         long totalVisitorCount = visitorDto.size();
         long countOfActiveVisitor = this.visitorServices.getActiveVisitors();
         Double busiestHours = this.visitorServices.getBusiestCheckInTime();

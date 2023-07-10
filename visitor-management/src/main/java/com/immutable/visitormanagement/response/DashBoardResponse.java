@@ -12,12 +12,11 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class DashBoardResponse {
-
     private Long totalVisitorCount;
     private Long totalActiveAccount;
     private Double busiestHours;
     private Map<String,Double> pieChartData;
     private Map<String,Long>   barGraphData;
     private List<PersonalAndOfficialByOrganization> personalAndOfficialByOrganization;
-    private List<VisitorDto> visitorDto;
+    private List<DownloadResponse> visitorDto;
 }

@@ -2,6 +2,7 @@ package com.immutable.visitormanagement.controller;
 
 
 import com.immutable.visitormanagement.dto.UserDto;
+import com.immutable.visitormanagement.response.UserCreatedresponse;
 import com.immutable.visitormanagement.service.ConfirmTokenService;
 import com.immutable.visitormanagement.service.UserService;
 import jakarta.mail.MessagingException;
@@ -23,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final ConfirmTokenService confirmationTokenService;
 
+
     @Autowired
     public UserController(UserService userService, ConfirmTokenService confirmationTokenService) {
         this.userService = userService;
@@ -30,14 +32,17 @@ public class UserController {
     }
 
     @PostMapping(CREATE_URL_USER)
-    public ResponseEntity<String> registration(@RequestBody UserDto userDto) throws SQLIntegrityConstraintViolationException {
+    public ResponseEntity<UserCreatedresponse> registration(@RequestBody UserDto userDto) throws SQLIntegrityConstraintViolationException {
         userService.signUp(userDto);
-        return new ResponseEntity<>("Thank you for registering. Your registration has been successful. Please wait for your account to be activated. Once the activation process is complete, we will notify you via email.", HttpStatus.CREATED);
+        UserCreatedresponse userCreatedresponse1 = new UserCreatedresponse();
+        userCreatedresponse1.setMessage("created Succssfully");
+        return new ResponseEntity<>(userCreatedresponse1,HttpStatus.CREATED);
     }
 
     @GetMapping(ACTIVATE_ACCOUNT_URL_USER)
     public ResponseEntity<String> activateAccount(@PathVariable String token) {
         String response = this.confirmationTokenService.verify(token);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }

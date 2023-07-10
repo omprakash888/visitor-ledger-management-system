@@ -17,7 +17,7 @@ public interface VisitorService {
 
     VisitorDto save(VisitorDto visitorDto);
 
-    List<VisitorDto> getAllVisitors();
+    List<DownloadResponse> getAllVisitors();
 
 
     VisitorDto getVisitorById(Long visitorId);

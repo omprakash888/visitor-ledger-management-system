@@ -59,9 +59,9 @@ public class VisitorServiceImpl implements VisitorService {
     }
 
     @Override
-    public List<VisitorDto> getAllVisitors() {
+    public List<DownloadResponse> getAllVisitors() {
         List<Visitor> visitors =  this.visitorRepository.findAll();
-        return visitors.stream().map(this::mapToVisitorDto).toList();
+        return visitors.stream().map(this::mapToDownloadResponse).toList();
     }
 
     @Override
@@ -103,9 +103,11 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Override
     public List<PersonalAndOfficialByOrganization> getPersonalAndOfficialByOrganization(DashboardRequest dashboardRequest) {
-        LocalDate localDate = LocalDate.parse(dashboardRequest.getDate());        List<Object[]> officialData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
+        LocalDate localDate = LocalDate.parse(dashboardRequest.getDate());
+        List<Object[]> officialData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"official");
         List<Object[]> personalData = this.visitorRepository.findDataByTypeOfVisitAndStartDate(localDate,"personal");
-
+        System.out.println(officialData.size());
+        System.out.println(personalData.size());
         Map<String, Long> personalMap = personalData.stream()
                 .collect(Collectors.toMap(row -> (String) row[0], row -> (Long) row[1]));
 
