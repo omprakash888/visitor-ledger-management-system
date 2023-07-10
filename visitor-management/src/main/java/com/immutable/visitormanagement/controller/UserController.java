@@ -2,16 +2,12 @@ package com.immutable.visitormanagement.controller;
 
 
 import com.immutable.visitormanagement.dto.UserDto;
-import com.immutable.visitormanagement.response.UserCreatedresponse;
+import com.immutable.visitormanagement.response.MessageResponse;
 import com.immutable.visitormanagement.service.ConfirmTokenService;
 import com.immutable.visitormanagement.service.UserService;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -32,11 +28,11 @@ public class UserController {
     }
 
     @PostMapping(CREATE_URL_USER)
-    public ResponseEntity<UserCreatedresponse> registration(@RequestBody UserDto userDto) throws SQLIntegrityConstraintViolationException {
+    public ResponseEntity<MessageResponse> registration(@RequestBody UserDto userDto) throws SQLIntegrityConstraintViolationException {
         userService.signUp(userDto);
-        UserCreatedresponse userCreatedresponse1 = new UserCreatedresponse();
-        userCreatedresponse1.setMessage("created Succssfully");
-        return new ResponseEntity<>(userCreatedresponse1,HttpStatus.CREATED);
+        MessageResponse userCreatedresponse = new MessageResponse();
+        userCreatedresponse.setMessage("created Succssfully");
+        return new ResponseEntity<>(userCreatedresponse,HttpStatus.CREATED);
     }
 
     @GetMapping(ACTIVATE_ACCOUNT_URL_USER)
