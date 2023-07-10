@@ -58,7 +58,7 @@ public class VisitorController {
     }
 
     @PostMapping(CHECKOUT_URL_VISITOR)
-    public ResponseEntity<String> updateOutTime(@RequestParam("visitorId") Long visitorId) {
+    public ResponseEntity<String> updateOutTime(@PathVariable("visitorId") Long visitorId) {
         String response = this.visitorServices.updateOutTime(visitorId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

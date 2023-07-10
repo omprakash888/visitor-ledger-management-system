@@ -10,10 +10,9 @@ public class Constants {
     public static final String CREATE_URL_VISITOR = "/api/visitor-details/create";
     public static final String GET_ALL_URL_VISITOR = "/api/visitor-details/getAllVisitors";
     public static final String GET_BY_ID_URL_VISITOR = "/api/visitor-details/getVisitorById";
-    public static final String CHECKOUT_URL_VISITOR = "/api/visitor-details/updateOutTime";
+    public static final String CHECKOUT_URL_VISITOR = "/api/visitor-details/updateOutTime/{visitorId}";
     public static final String DASHBOARD_URL_VISITOR = "/api/visitor-details/dashboardData";
     public static final String GET_VISITOR_ORGANIZATION = "/api/visitor-details/getVisitorOrganization";
-
     public static final String DOWNLOAD_REPORTS = "/api/visitor-details/downloadReports";
 
 
