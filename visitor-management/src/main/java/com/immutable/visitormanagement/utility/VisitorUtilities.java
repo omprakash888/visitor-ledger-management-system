@@ -1,19 +1,16 @@
 package com.immutable.visitormanagement.utility;
 
 import com.immutable.visitormanagement.dto.VisitorDto;
+import com.immutable.visitormanagement.response.DownloadResponse;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -24,10 +21,13 @@ import org.thymeleaf.context.Context;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import java.util.Base64;
+import static com.immutable.visitormanagement.constants.Constants.ADMIN_EMAIL;
 
 @Component
 public class VisitorUtilities {
@@ -114,6 +114,7 @@ public class VisitorUtilities {
         }
     }
 
+    @Async
     public void sendResetPasswordLink(String email, String link) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -130,83 +131,74 @@ public class VisitorUtilities {
         }
     }
 
-    public void sendReportsInEmail(String filepath,String[] cc,String email) {
+    @Async
+    public void  sendReportsEmail(List<DownloadResponse> downloadResponses,String[] emails) throws MessagingException {
+
         try {
+
+            Workbook workbook = new HSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Visitor Ledger Sheet");
+            Row header = sheet.createRow(0);
+
+            header.createCell(0).setCellValue("VISITOR ID");
+            header.createCell(1).setCellValue("VISITOR NAME");
+            header.createCell(2).setCellValue("VISITOR AGE");
+            header.createCell(3).setCellValue("VISITOR GENDER");
+            header.createCell(4).setCellValue("VISITOR EMAIL");
+            header.createCell(5).setCellValue("VISITOR CONTACT NUMBER");
+            header.createCell(6).setCellValue("VISITOR TYPE OF VISIT");
+            header.createCell(7).setCellValue("VISITOR ORGANIZATION");
+            header.createCell(8).setCellValue("VISITOR WHOM TO MEET");
+            header.createCell(9).setCellValue(" DATE");
+            header.createCell(10).setCellValue("VISITOR CHECK IN_TIME");
+            header.createCell(11).setCellValue("VISITOR CHECK OUT_TIME");
+            header.createCell(12).setCellValue("REASON FOR MEETING");
+
+            int rowIndex = 1;
+            for(DownloadResponse downloadResponse : downloadResponses) {
+                Row dataRow = sheet.createRow(rowIndex++);
+                dataRow.createCell(0).setCellValue(downloadResponse.getVisitorId());
+                dataRow.createCell(1).setCellValue(downloadResponse.getVisitorName());
+                dataRow.createCell(2).setCellValue(downloadResponse.getAge());
+                dataRow.createCell(3).setCellValue(downloadResponse.getGender());
+                dataRow.createCell(4).setCellValue(downloadResponse.getEmail());
+                dataRow.createCell(5).setCellValue(downloadResponse.getContactNumber());
+                dataRow.createCell(6).setCellValue(downloadResponse.getTypeOfVisit());
+                dataRow.createCell(7).setCellValue(downloadResponse.getVisitorOrganization());
+                dataRow.createCell(8).setCellValue(downloadResponse.getWhomToMeet());
+                dataRow.createCell(9).setCellValue(downloadResponse.getDate());
+                dataRow.createCell(10).setCellValue(downloadResponse.getInTime());
+                dataRow.createCell(11).setCellValue(downloadResponse.getOutTime());
+                dataRow.createCell(12).setCellValue(downloadResponse.getReasonForMeeting());
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+
+            byte[] excelBytes = outputStream.toByteArray();
+            ByteArrayResource resource = new ByteArrayResource(excelBytes) {
+                public String getFilename() {
+                    String fileName = "visitor_ledger_sheet " + LocalDate.now() + LocalTime.now() +".xls";
+                    return fileName;
+                }
+            };
+            workbook.close();
+            outputStream.close();
+
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,true);
+            helper.setSubject("Visitor Summary Report");
+            helper.setFrom(ADMIN_EMAIL);
+            helper.setText("please find attachment below");
+            helper.setTo(emails);
+            helper.addAttachment(resource.getFilename(), resource);
 
-            mimeMessageHelper.setSubject("Visitor Summary Report");
-            mimeMessageHelper.setFrom("cherrie.cr7@gmail.com");
-            mimeMessageHelper.setTo(email);
-            mimeMessageHelper.setCc(cc);
-
-            FileSystemResource fileSystemResource = new FileSystemResource(new File(filepath));
-            mimeMessageHelper.addAttachment(Objects.requireNonNull(fileSystemResource.getFilename()),fileSystemResource);
-            mailSender.send(mimeMessageHelper.getMimeMessage());
-        } catch (Exception e) {
+            mailSender.send(mimeMessage);
+        }
+        catch (IOException | MessagingException e) {
             e.printStackTrace();
         }
     }
-
-    public ResponseEntity<ByteArrayResource> downloadExcel(List<VisitorDto> visitors) throws IOException {
-         // Replace with your own list of Visitor objects
-
-        // Create Excel workbook and sheet
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Visitors");
-
-        // Create header row
-        Row headerRow = sheet.createRow(0);
-        String[] headers = {"Visitor-Id","Visitor Name","Age","gender","contact Number","email","date","check-In-Time","check-out-Time","Type of Visit","Organization Name","Whom To Meet","Reason For Meeting"};
-        for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
-        }
-
-        // Create data rows
-        int rowNum = 1;
-        for (VisitorDto visitor : visitors) {
-            Row row = sheet.createRow(rowNum++);
-            // Set cell values for each column
-            row.createCell(0).setCellValue(visitor.getVisitorId());
-            row.createCell(1).setCellValue(visitor.getVisitorName());
-            row.createCell(2).setCellValue(visitor.getAge());
-            row.createCell(3).setCellValue(visitor.getGender());
-            row.createCell(4).setCellValue(visitor.getContactNumber());
-            row.createCell(5).setCellValue(visitor.getEmail());
-            row.createCell(6).setCellValue(visitor.getDate());
-            row.createCell(7).setCellValue(visitor.getInTime().toString());
-            row.createCell(8).setCellValue(visitor.getOutTime().toString());
-            row.createCell(9).setCellValue(visitor.getTypeOfVisit());
-            row.createCell(10).setCellValue(visitor.getVisitorOrganization());
-            row.createCell(11).setCellValue(visitor.getWhomToMeet());
-            row.createCell(12).setCellValue(visitor.getReasonForMeeting());
-        }
-
-        // Write workbook to output stream
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        workbook.write(outputStream);
-
-        // Prepare response with Excel content
-        ByteArrayResource resource = new ByteArrayResource(outputStream.toByteArray());
-        byte[] excelBytes = outputStream.toByteArray();
-        HttpHeaders header = new HttpHeaders();
-        header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        header.setContentDisposition(ContentDisposition.attachment().filename("visitors.xlsx").build());
-
-//        HttpHeaders header = new HttpHeaders();
-//        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=visitors.xlsx");
-//
-//        return ResponseEntity
-//                .ok()
-//                .headers(header)
-//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .body(resource);
-
-        return ResponseEntity.ok().headers(header).body(new ByteArrayResource(excelBytes));
-
-    }
-
 
 
 }

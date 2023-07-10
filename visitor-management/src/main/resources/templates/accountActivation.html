@@ -3,57 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Account Activation</title>
-    <style>
-        /* Inline CSS */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .content {
-            margin-bottom: 20px;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-        }
-    </style>
 </head>
-<body>
-<div class="container">
-    <div class="header">
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px;">
+<div class="container" style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+    <div class="header" style="text-align: center; margin-bottom: 20px;">
         <h1>Account Activation</h1>
     </div>
-    <div class="content">
+    <div class="content" style="margin-bottom: 20px;">
         <p>Dear Admin,</p>
         <p>A new employee account requires activation. Please click the button below to activate the account:</p>
         <p>
-            <a class="button" th:href="${link}">
-                Activate Account
-            </a>
+            <a class="button" th:href="${link}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">Activate Account</a>
         </p>
         <p>If you did not request this account activation, please ignore this email.</p>
     </div>
-    <div class="footer">
+    <div class="footer" style="text-align: center; font-size: 12px;">
         <p>This email was generated automatically. Do not reply.</p>
     </div>
 </div>

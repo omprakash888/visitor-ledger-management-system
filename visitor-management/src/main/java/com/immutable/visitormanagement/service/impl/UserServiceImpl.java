@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
         this.confirmationTokenRepository.save(confirmationToken);
-        visitorUtilities.sendActivationEmail("http://localhost:8080/api/auth/activateAccount/" + confirmationToken.getConfirmationToken());
+        visitorUtilities.sendActivationEmail("http://localhost:8080/api/user/activateAccount/" + confirmationToken.getConfirmationToken());
     }
 
     @Override
@@ -87,16 +87,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String sendDownloadReportAsMail(String filePath, String username) {
-        String[] emails = this.userRepository.findAllEmails();
-        this.visitorUtilities.sendReportsInEmail(filePath,emails,username);
-        return "Email sent successfully";
-    }
-
-    @Override
     public boolean checkAccountActivatedOrNot(String email) {
         User user = this.userRepository.findByEmailIgnoreCase(email);
         return user != null && user.isAccountEnabled();
+    }
+
+    @Override
+    public String[] getAllEmails() {
+        return this.userRepository.findAllEmails();
     }
 
     private User mapToUser(UserDto userDto) {

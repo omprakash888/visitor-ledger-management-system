@@ -6,11 +6,13 @@ import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.request.DownloadRequest;
 import com.immutable.visitormanagement.response.DashBoardResponse;
 import com.immutable.visitormanagement.response.DownloadResponse;
+import com.immutable.visitormanagement.service.UserService;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +28,14 @@ public class VisitorController {
 
     private final VisitorService visitorServices;
     private final VisitorUtilities visitorUtilities;
+    private final UserService userService;
 
 
     @Autowired
-    public VisitorController(VisitorService visitorServices, VisitorUtilities visitorUtilities) {
+    public VisitorController(VisitorService visitorServices, VisitorUtilities visitorUtilities, UserService userService) {
         this.visitorServices = visitorServices;
         this.visitorUtilities = visitorUtilities;
+        this.userService = userService;
     }
 
 
@@ -59,7 +63,7 @@ public class VisitorController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(DASHBOARD_URL_VISITOR)
+    @PostMapping(DASHBOARD_URL_VISITOR)
     public ResponseEntity<DashBoardResponse> getDashboardData(@RequestBody DashboardRequest dashboardRequest) {
 
         Map<String,Double> pieChartData = this.visitorServices.getPieChartData(dashboardRequest);
@@ -91,8 +95,10 @@ public class VisitorController {
     }
 
     @PostMapping(DOWNLOAD_REPORTS)
-    public ResponseEntity<List<DownloadResponse>> downloadData(@RequestBody DownloadRequest downloadRequest) throws IOException {
+    public ResponseEntity<List<DownloadResponse>> downloadData(@RequestBody DownloadRequest downloadRequest) throws IOException, MessagingException {
         List<DownloadResponse> visitorList = this.visitorServices.downloadData(downloadRequest);
+        String[] emails = this.userService.getAllEmails();
+        this.visitorUtilities.sendReportsEmail(visitorList,emails);
         return new ResponseEntity<>(visitorList,HttpStatus.OK);
     }
 

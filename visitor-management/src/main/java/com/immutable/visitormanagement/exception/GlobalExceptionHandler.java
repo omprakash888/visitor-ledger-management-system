@@ -42,11 +42,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleGlobalException(Exception ex) {
-        ApiResponse apiResponse = new ApiResponse(new Date(), ex.getMessage(),false);
-        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ApiResponse> handleGlobalException(Exception ex) {
+//        ApiResponse apiResponse = new ApiResponse(new Date(), ex.getMessage(),false);
+//        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ApiResponse> handleGlobalException(NoSuchElementException exception){

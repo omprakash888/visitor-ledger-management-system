@@ -1,6 +1,7 @@
 package com.immutable.visitormanagement.service;
 
 import com.immutable.visitormanagement.dto.UserDto;
+import jakarta.mail.MessagingException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
@@ -13,7 +14,7 @@ public interface UserService {
 
     public String resetPassword(String token,String password);
 
-    public String sendDownloadReportAsMail(String filePath,String username);
-
     boolean checkAccountActivatedOrNot(String email);
+
+    String[] getAllEmails();
 }

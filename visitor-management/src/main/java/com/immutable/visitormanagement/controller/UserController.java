@@ -4,6 +4,7 @@ package com.immutable.visitormanagement.controller;
 import com.immutable.visitormanagement.dto.UserDto;
 import com.immutable.visitormanagement.service.ConfirmTokenService;
 import com.immutable.visitormanagement.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,19 +52,6 @@ public class UserController {
     public ResponseEntity<String> resetPassword(@PathVariable("token") String token, @PathVariable("password") String password) {
         String response = this.userService.resetPassword(token,password);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping(SEND_EMAIL_URL_USER)
-    public ResponseEntity<String> sendDownloadReportAsMail(@PathVariable String filePath) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        String username = authentication.getName();
-        System.out.println("user name " + username);
-        System.out.println(filePath);
-        String response = this.userService.sendDownloadReportAsMail(filePath,username);
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
-
     }
 
 }

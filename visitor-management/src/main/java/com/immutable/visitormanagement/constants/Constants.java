@@ -30,7 +30,7 @@ public class Constants {
     public static final String ACTIVATE_ACCOUNT_URL_USER = "/api/user/activateAccount/{token}";
     public static final String FORGOT_PASSWORD_URL_USER = "/api/user/forgot-password/{email}";
     public static final String RESET_PASSWORD_URL_USER = "/api/user/reset-password/{token}/{password}";
-    public static final String SEND_EMAIL_URL_USER = "/api/user/sendReports/{filePath}";
+    public static final String SEND_EMAIL_URL_USER = "/api/user/sendReports/{filepath}";
 
 
     //ALL AUTHENTICATION CONTROLLER
