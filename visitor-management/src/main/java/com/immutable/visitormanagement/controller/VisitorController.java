@@ -6,6 +6,7 @@ import com.immutable.visitormanagement.request.DashboardRequest;
 import com.immutable.visitormanagement.request.DownloadRequest;
 import com.immutable.visitormanagement.response.DashBoardResponse;
 import com.immutable.visitormanagement.response.DownloadResponse;
+import com.immutable.visitormanagement.response.MessageResponse;
 import com.immutable.visitormanagement.service.UserService;
 import com.immutable.visitormanagement.service.VisitorService;
 import com.immutable.visitormanagement.utility.VisitorUtilities;
@@ -58,9 +59,9 @@ public class VisitorController {
     }
 
     @PostMapping(CHECKOUT_URL_VISITOR)
-    public ResponseEntity<String> updateOutTime(@PathVariable("visitorId") Long visitorId) {
+    public ResponseEntity<MessageResponse> updateOutTime(@PathVariable("visitorId") Long visitorId) {
         String response = this.visitorServices.updateOutTime(visitorId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponse(response), HttpStatus.OK);
     }
 
     @PostMapping(DASHBOARD_URL_VISITOR)

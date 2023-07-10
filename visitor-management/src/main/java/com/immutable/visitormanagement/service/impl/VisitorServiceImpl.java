@@ -80,7 +80,7 @@ public class VisitorServiceImpl implements VisitorService {
         }
         visitor.setOutTime(LocalTime.now());
         this.visitorRepository.save(visitor);
-        return "Thank you for your time";
+        return "Thank you for your time, Have a good day";
     }
 
     @Override
